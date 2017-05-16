@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.dfqm.web.webdemo">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    //广播启动app
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- 静默安装所需的权限 -->
+    <uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER"/>
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.DELETE_PACKAGES"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
+    <uses-permission android:name="android.permission.HARDWARE_TEST"/>
+
+
+    <application
+        android:name=".application.AppApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/zmp_app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        //开机自启动广播
+        <receiver android:name=".revceiver.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".activity.BaseActivity">
+        </activity>
+        <activity android:name=".activity.UpdateAppActivity">
+        </activity>
+        <activity android:name=".activity.VideoListActivity">
+        </activity>
+        <activity
+            android:name=".activity.PlayVideoActivity"
+            android:configChanges="orientation"
+            >
+        </activity>
+        <activity android:name=".activity.PlayPictureActivity">
+        </activity>
+        <activity android:name=".activity.PictureListActivity">
+        </activity>
+        <activity android:name=".activity.QRcodeActivity">
+        </activity>
+        <activity android:name=".activity.UserAgreeMentActivity">
+        </activity>
+        <activity android:name=".activity.DownloadActivity">
+        </activity>
+        <activity android:name=".activity.WebViewVideoActivity">
+        </activity>
+        <activity android:name=".activity.MainTainActivity">
+        </activity>
+        //apk安装后包状态广播
+        <receiver android:name=".revceiver.InitApkBroadCastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+        //判断网络状态广播
+        <receiver
+            android:name=".revceiver.ConnectionChangeReceiver"
+            android:label="NetworkConnection">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- 友盟 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="58df1055734be42f400027d0"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Umeng"/>
+
+
+    </application>
+
+</manifest>

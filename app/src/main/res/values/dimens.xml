@@ -1,0 +1,16 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="exit_app_ima_btn_width">30dp</dimen>
+    <dimen name="exit_app_ima_btn_height">30dp</dimen>
+    <dimen name="reconnect_text_tip">30sp</dimen>
+
+    <dimen name="wanring_text_tip">16sp</dimen>
+    <dimen name="tv_play_padding">10dp</dimen>
+    <dimen name="top_title_bar_layout_height">46dp</dimen>
+    <dimen name="download_progress_height">8dp</dimen>
+    <dimen name="download_btn_height">30dp</dimen>
+
+
+</resources>
