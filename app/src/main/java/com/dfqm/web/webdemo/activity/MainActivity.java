@@ -42,7 +42,6 @@ import static com.dfqm.web.webdemo.constants.Constant.SID;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
-
     //退出app
     private ImageView mImaExit;
     //错误页面
