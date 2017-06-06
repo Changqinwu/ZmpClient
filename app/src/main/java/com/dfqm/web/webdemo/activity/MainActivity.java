@@ -24,12 +24,14 @@ import android.widget.TextView;
 import com.dfqm.web.webdemo.API.zmpApi;
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
+import com.dfqm.web.webdemo.utils.CreatUniqueIdUtils;
 import com.dfqm.web.webdemo.utils.DownLoadVideoUtil;
 import com.dfqm.web.webdemo.utils.FileUtils;
 import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.tencent.smtt.sdk.WebView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,15 +69,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         //获取设备唯一标识
-        uniquePsuedoID = new FileUtils().getUniquePsuedoID();
-        ToastUtil.show(this, "手机uniquePsuedoID:" + uniquePsuedoID);
+//        uniquePsuedoID = new FileUtils().getUniquePsuedoID();
+//        new FileUtils().getDeviceInfo();
+
+        //初始化view
+        initView();
+        //生成唯一标识
+        existUniqueId();
+    }
+
+    private void existUniqueId() {
+        //判断唯一标识的Id的txt文件的内容是否存在
+        String pathId = "/sdcard/zmpfile/uniqueId.txt";
+        File file = new File(pathId);
+        CreatUniqueIdUtils uniqueIdUtils = new CreatUniqueIdUtils();
+        String uniquePsuedoID = uniqueIdUtils.getFileContent(file);
 
         if (!"".equals(uniquePsuedoID)) {
-            //初始化view
-            initView();
             //获取设备状态信息
             initData(uniquePsuedoID);
+            ToastUtil.show(this, "手机uniquePsuedoID:" + uniquePsuedoID);
+        }else {
+            //创建唯一标识Id
+            uniqueIdUtils.initData();
+            existUniqueId();
         }
+
+
     }
 
     @Override
@@ -200,7 +220,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //播放webview轮播视频
         @JavascriptInterface
         public void changeActivity(String param, String url) {
-            ToastUtil.show(MainActivity.this, "参数" + param);
+//            ToastUtil.show(MainActivity.this, "参数" + param);
             videoLists.clear();
             if ("1".equals(param)) {
                 //关闭视频界面
@@ -259,5 +279,4 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         timer.start();// 开始计时
         //timer.cancel(); // 取消
     }
-
 }

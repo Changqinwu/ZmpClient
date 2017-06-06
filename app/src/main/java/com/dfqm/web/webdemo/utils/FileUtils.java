@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -110,35 +111,65 @@ public class FileUtils {
     public String getUniquePsuedoID() {
         String m_szDevIDShort = "35" +
                 // 主板
-                Build.BOARD.length() % 10 +
+                Build.BOARD +
                 // android系统定制商
-                Build.BRAND.length() % 10 +
+                Build.BRAND +
                 // cpu指令集
-                Build.CPU_ABI.length() % 10 +
+                Build.CPU_ABI +
                 // 设备参数
-                Build.DEVICE.length() % 10 +
+                Build.DEVICE +
                 // 显示屏参数
-                Build.DISPLAY.length() % 10 +
-                Build.HOST.length() % 10 +
+                Build.DISPLAY +
+                Build.HOST +
                 // 修订版本列表
-                Build.ID.length() % 10 +
+                Build.ID +
                 // 硬件制造商
-                Build.MANUFACTURER.length() % 10 +
+                Build.MANUFACTURER +
                 // 版本
-                Build.MODEL.length() % 10 +
+                Build.MODEL+
                 // 手机制造商
-                Build.PRODUCT.length() % 10 +
+                Build.PRODUCT +
                 // 描述build的标签
-                Build.TAGS.length() % 10 +
+                Build.TAGS +
                 // builder类型
-                Build.TYPE.length() % 10 +
-                Build.USER.length() % 10; //13 位
+                Build.TYPE+
+                Build.USER; //13 位
 
 //        //A hardware serial number, if available. Alphanumeric only, case-insensitive.
 //        String serial = Build.SERIAL;
         //使用硬件信息拼凑出来的15位号码
+
         return m_szDevIDShort;
     }
 
+
+    /**
+     * 获取指定字段信息
+     * @return
+     */
+    public String getDeviceInfo(){
+        StringBuffer sb =new StringBuffer();
+        sb.append("主板："+Build.BOARD);
+        sb.append("\n系统启动程序版本号："+ Build.BOOTLOADER);
+        sb.append("\n系统定制商："+Build.BRAND);
+        sb.append("\ncpu指令集："+Build.CPU_ABI);
+        sb.append("\ncpu指令集2："+Build.CPU_ABI2);
+        sb.append("\n设置参数："+Build.DEVICE);
+        sb.append("\n显示屏参数："+Build.DISPLAY);
+        sb.append("\n无线电固件版本："+Build.getRadioVersion());
+        sb.append("\n硬件识别码："+Build.FINGERPRINT);
+        sb.append("\n硬件名称："+Build.HARDWARE);
+        sb.append("\nHOST:"+Build.HOST);
+        sb.append("\n修订版本列表："+Build.ID);
+        sb.append("\n硬件制造商："+Build.MANUFACTURER);
+        sb.append("\n版本："+Build.MODEL);
+        sb.append("\n硬件序列号："+Build.SERIAL);
+        sb.append("\n手机制造商："+Build.PRODUCT);
+        sb.append("\n描述Build的标签："+Build.TAGS);
+        sb.append("\nTIME:"+Build.TIME);
+        sb.append("\nbuilder类型："+Build.TYPE);
+        sb.append("\nUSER:"+Build.USER);
+        return sb.toString();
+    }
 
 }

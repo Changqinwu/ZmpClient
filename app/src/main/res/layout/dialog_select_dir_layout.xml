@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_video"
@@ -28,9 +28,7 @@
             android:padding="5dp"
             android:background="@drawable/dialog_selec_btn_shape"
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"
             android:text="图片列表"/>
@@ -42,9 +40,7 @@
             android:padding="5dp"
             android:background="@drawable/dialog_selec_btn_shape"
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"
             android:text="网络轮播"/>
