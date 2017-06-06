@@ -71,7 +71,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //获取设备唯一标识
 //        uniquePsuedoID = new FileUtils().getUniquePsuedoID();
 //        new FileUtils().getDeviceInfo();
-
         //初始化view
         initView();
         //生成唯一标识
