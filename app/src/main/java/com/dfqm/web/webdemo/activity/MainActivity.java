@@ -68,9 +68,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //获取设备唯一标识
-//        uniquePsuedoID = new FileUtils().getUniquePsuedoID();
-//        new FileUtils().getDeviceInfo();
         //初始化view
         initView();
         //生成唯一标识
@@ -141,8 +138,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         // 设置js接口  第一个参数事件接口实例，第二个是实例在js中的别名，这个在js中会用到
         JSInterface = new JavaScriptInterface(this); ////------
         mWebView.addJavascriptInterface(JSInterface, "JSInterface");
-
-
     }
 
     @Override
