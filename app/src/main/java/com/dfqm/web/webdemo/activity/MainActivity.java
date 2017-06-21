@@ -61,6 +61,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ArrayList<String> videoLists = new ArrayList<>();
     private String uniquePsuedoID;
     private CountDownTimer timer;
+    private ImageView mImaRightExitApp;
+    //判断是否倒计时完
+    private boolean timeFinish = true;
 
 
     @Override
@@ -79,7 +82,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         String pathId = "/sdcard/zmpfile/uniqueId.txt";
         File file = new File(pathId);
         CreatUniqueIdUtils uniqueIdUtils = new CreatUniqueIdUtils();
-        String uniquePsuedoID = uniqueIdUtils.getFileContent(file);
+        uniquePsuedoID = uniqueIdUtils.getFileContent(file);
 
         if (!"".equals(uniquePsuedoID)) {
             //获取设备状态信息
@@ -119,10 +122,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mImaError = (ImageView) findViewById(R.id.ima_web_page_error);
         mTvCount = (TextView) findViewById(R.id.tv_request_count_time);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
+        mImaRightExitApp = (ImageView) findViewById(R.id.ima_rignt_top_exit_app);
         view = findViewById(R.id.activity_main);
         mImaExit.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
-
+        mImaRightExitApp.setOnClickListener(this);
     }
 
     private void loadWebViewData(String param) {
@@ -145,15 +149,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (view.getId()) {
             //退出app弹窗
             case R.id.ima_exit_app:
-                if ((System.currentTimeMillis() - exitTime) > 500) {
-                    exitTime = System.currentTimeMillis();
-                } else {
-                    exitAppDialog(this);
-                }
+                exitAppDialog(this);
                 break;
             //打开本地视频列表
             case R.id.ima_open_videolist:
                 showSelecFileLists(this, this);
+                break;
+            //右上角退出弹窗
+            case R.id.ima_rignt_top_exit_app:
+                exitAppDialog(this);
                 break;
         }
     }
@@ -196,8 +200,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //出错界面显示
                 mImaError.setVisibility(View.VISIBLE);
                 mTvCount.setVisibility(View.VISIBLE);
-                //开始倒计时
-                startCountDownTime(10);
+
+                if (timeFinish) {
+                    timeFinish = false;
+                    //开始倒计时
+                    startCountDownTime(10);
+                }
+
             }
 
         }
@@ -248,10 +257,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     //退出app弹窗
     public void exitAppDialog(final Context context) {
-        dialogExit(context);
+
+        if ((System.currentTimeMillis() - exitTime) > 500) {
+            exitTime = System.currentTimeMillis();
+        } else {
+            dialogExit(context);
+        }
     }
 
-    public void startCountDownTime(long time) {
+    public void startCountDownTime(final long time) {
         /**
          * 最简单的倒计时类，实现了官方的CountDownTimer类（没有特殊要求的话可以使用）
          * 即使退出activity，倒计时还能进行，因为是创建了后台的线程。
@@ -268,9 +282,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onFinish() {
                 initData(uniquePsuedoID);
+                //倒计时完
+                timeFinish = true;
             }
+
+
+
         };
         timer.start();// 开始计时
+
         //timer.cancel(); // 取消
     }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        if (timer != null) {
+//            timer.cancel();
+//            timer.onFinish();
+//        }
+//    }
 }

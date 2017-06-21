@@ -66,7 +66,7 @@ public class AppApplication extends Application{
             activity.finish();
         }
         clearActivity();//千万记得清空取消引用。
-        System.exit(0);
+//        System.exit(0);
     }
 
 }

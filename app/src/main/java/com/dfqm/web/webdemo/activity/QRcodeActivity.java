@@ -29,6 +29,7 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
     private JavaScriptInterface JSInterface;
     private ImageView mImaOpenVideoList;
     private long exitTime;
+    private ImageView mImaRightExitApp;
 
 
     @Override
@@ -65,18 +66,26 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
         switch (view.getId()) {
             //退出app弹窗
             case R.id.ima_exit_app:
-                if ((System.currentTimeMillis() - exitTime) > 500) {
-                    exitTime = System.currentTimeMillis();
-                } else {
-                    dialogExit(this);
-                }
+                exitAppDialog();
                 break;
             //打开列表选择
             case R.id.ima_open_videolist:
                 showSelecFileLists(this,this);
                 break;
+            //右上角退出app
+            case R.id.ima_rignt_top_exit_app:
+                exitAppDialog();
+                break;
         }
 
+    }
+
+    private void exitAppDialog() {
+        if ((System.currentTimeMillis() - exitTime) > 500) {
+            exitTime = System.currentTimeMillis();
+        } else {
+            dialogExit(this);
+        }
     }
 
     public class JavaScriptInterface {
@@ -109,6 +118,9 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
         mTvCount = (TextView) findViewById(R.id.tv_request_count_time);
         mImaExit = (ImageView) findViewById(R.id.ima_exit_app);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
+        mImaRightExitApp = (ImageView) findViewById(R.id.ima_rignt_top_exit_app);
+
+        mImaRightExitApp.setOnClickListener(this);
         mImaExit.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
     }

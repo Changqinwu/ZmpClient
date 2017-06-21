@@ -67,8 +67,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        app = new AppApplication().getApp();
-//        app.addActivity(this);
+
         //隐藏顶部导航栏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -84,6 +83,8 @@ public class BaseActivity extends AppCompatActivity {
         MobclickAgent.setDebugMode(true);
         MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+        //添加界面
+        AppApplication.getApp().addActivity(this);
     }
 
     private void getWindowsHeightWidth() {

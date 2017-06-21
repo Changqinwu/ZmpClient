@@ -7,10 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
-import com.dfqm.web.webdemo.activity.MainActivity;
-
-import static com.dfqm.web.webdemo.constants.Constant.ACTION_MAIN;
-import static com.dfqm.web.webdemo.constants.Constant.ACTION_SID;
 
 /**
  * Created by Administrator on 2017/2/17.
