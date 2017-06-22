@@ -169,7 +169,7 @@ public class UpdateAppCallBack extends StringCallback {
                                 intent.putExtra(DEVICEID, deviceId);
                                 context.startActivity(intent);
                             } else {
-                                ToastUtil.show(context, "用户已授权...");
+//                                ToastUtil.show(context, "用户已授权...");
                                 String sid = authorizeEntity.getSid();
                                 if (!"".equals(sid)) {
                                     //显示主界面

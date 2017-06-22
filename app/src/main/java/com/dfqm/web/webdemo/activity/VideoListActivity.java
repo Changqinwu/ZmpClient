@@ -55,6 +55,7 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
     private MyAdapter adapter;
     private UsbBroadcastReceiver mBroadcastReceiver;
     private ProgressDialogUtil dialogUtil;
+    private ImageView mImaExitRightApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +131,10 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
         mImaExit = (ImageView) findViewById(R.id.ima_exit_app);
         mTvPlay = (TextView) findViewById(R.id.tv_play);
         mRlEmpty = (RelativeLayout) findViewById(R.id.re_empty);
-        mTvPlay.setOnClickListener(this);
+        mImaExitRightApp = (ImageView) findViewById(R.id.ima_rignt_top_exit_app);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
+        mImaExitRightApp.setOnClickListener(this);
+        mTvPlay.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
         mImaExit.setOnClickListener(this);
         mRlEmpty.setOnClickListener(this);
@@ -159,11 +162,7 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
         switch (view.getId()) {
             //退出app弹窗
             case R.id.ima_exit_app:
-                if ((System.currentTimeMillis() - exitTime) > 500) {
-                    exitTime = System.currentTimeMillis();
-                } else {
-                    dialogExit(this);
-                }
+                exitAppDialog();
                 break;
 
             //立即播放
@@ -183,6 +182,19 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
             case R.id.ima_open_videolist:
                 showSelecFileLists(this,this);
                 break;
+
+            //右上角退出app
+            case R.id.ima_rignt_top_exit_app:
+                exitAppDialog();
+                break;
+        }
+    }
+
+    private void exitAppDialog() {
+        if ((System.currentTimeMillis() - exitTime) > 500) {
+            exitTime = System.currentTimeMillis();
+        } else {
+            dialogExit(this);
         }
     }
 

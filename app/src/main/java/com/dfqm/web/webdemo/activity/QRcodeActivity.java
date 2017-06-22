@@ -126,5 +126,11 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mWebView != null) {
+            mWebView.destroy();
+        }
+    }
 }

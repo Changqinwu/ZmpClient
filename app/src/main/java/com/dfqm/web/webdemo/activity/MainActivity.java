@@ -1,7 +1,6 @@
 package com.dfqm.web.webdemo.activity;
 
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 
@@ -75,6 +74,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initView();
         //生成唯一标识
         existUniqueId();
+
     }
 
     private void existUniqueId() {
@@ -87,8 +87,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (!"".equals(uniquePsuedoID)) {
             //获取设备状态信息
             initData(uniquePsuedoID);
-            ToastUtil.show(this, "手机uniquePsuedoID:" + uniquePsuedoID);
-        }else {
+//            ToastUtil.show(this, "uniquePsuedoID:" + uniquePsuedoID);
+        } else {
             //创建唯一标识Id
             uniqueIdUtils.initData();
             existUniqueId();
@@ -250,7 +250,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 DownLoadVideoUtil loadVideoUtil = new DownLoadVideoUtil();
                 loadVideoUtil.loadVideoListData(MainActivity.this, videoLists);
             }
-            ToastUtil.show(MainActivity.this, "列表数" + videoLists.size());
+//            ToastUtil.show(MainActivity.this, "列表数" + videoLists.size());
         }
 
     }
@@ -287,19 +287,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
 
 
-
         };
         timer.start();// 开始计时
-
-        //timer.cancel(); // 取消
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        if (timer != null) {
-//            timer.cancel();
-//            timer.onFinish();
-//        }
-//    }
 }

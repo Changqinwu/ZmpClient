@@ -43,6 +43,7 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
     //遍历的图片格式
     private String[] fileType = new String[]{".jpg", ".png"};
     private String path;
+    private ImageView mImaRightExitApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,8 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
         mTvPlay = (TextView) findViewById(R.id.tv_play);
         mRlEmpty = (RelativeLayout) findViewById(R.id.re_empty);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
+        mImaRightExitApp = (ImageView) findViewById(R.id.ima_rignt_top_exit_app);
+        mImaRightExitApp.setOnClickListener(this);
         mImaExit.setOnClickListener(this);
         mTvPlay.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
@@ -144,11 +147,7 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
         switch (view.getId()) {
             //退出app弹窗
             case R.id.ima_exit_app:
-                if ((System.currentTimeMillis() - exitTime) > 500) {
-                    exitTime = System.currentTimeMillis();
-                } else {
-                    dialogExit(this);
-                }
+                exitAppDialog();
                 break;
             //播放图片
             case R.id.tv_play:
@@ -161,7 +160,18 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
             case R.id.ima_open_videolist:
                 showSelecFileLists(this,this);
                 break;
+            //右上角退出app
+            case R.id.ima_rignt_top_exit_app:
+                exitAppDialog();
+                break;
+        }
+    }
 
+    private void exitAppDialog() {
+        if ((System.currentTimeMillis() - exitTime) > 500) {
+            exitTime = System.currentTimeMillis();
+        } else {
+            dialogExit(this);
         }
     }
 

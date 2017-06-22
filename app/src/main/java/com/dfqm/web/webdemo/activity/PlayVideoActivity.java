@@ -27,6 +27,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
     private ImageView mImaOpenVideoList;
     private PlayVideoBroadcastreceiver receiver;
     private int mVideoRotation;
+    private ImageView mImaExitRightApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +151,8 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
         videoView = (PLVideoTextureView) findViewById(R.id.videoview);
         mImaExit = (ImageView) findViewById(R.id.ima_exit_app);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
+        mImaExitRightApp = (ImageView) findViewById(R.id.ima_rignt_top_exit_app);
+        mImaExitRightApp.setOnClickListener(this);
         mImaExit.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
     }
@@ -159,17 +162,24 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
         switch (view.getId()) {
             //退出app弹窗
             case R.id.ima_exit_app:
-                if ((System.currentTimeMillis() - exitTime) > 500) {
-                    exitTime = System.currentTimeMillis();
-                } else {
-                    dialogExit(this);
-                }
+                exitAppDialog();
                 break;
             //打开列表选择
             case R.id.ima_open_videolist:
                 showSelecFileLists(this,this);
                 break;
+            //右上角退出app
+            case R.id.ima_rignt_top_exit_app:
+                exitAppDialog();
+                break;
+        }
+    }
 
+    private void exitAppDialog() {
+        if ((System.currentTimeMillis() - exitTime) > 500) {
+            exitTime = System.currentTimeMillis();
+        } else {
+            dialogExit(this);
         }
     }
 
