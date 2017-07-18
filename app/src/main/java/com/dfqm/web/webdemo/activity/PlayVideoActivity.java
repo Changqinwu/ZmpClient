@@ -26,7 +26,6 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
     private long exitTime;
     private ImageView mImaOpenVideoList;
     private PlayVideoBroadcastreceiver receiver;
-    private int mVideoRotation;
     private ImageView mImaExitRightApp;
 
     @Override

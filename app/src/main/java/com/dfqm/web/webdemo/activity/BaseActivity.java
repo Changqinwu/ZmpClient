@@ -36,6 +36,8 @@ import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,6 +75,8 @@ public class BaseActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_base);
+        //屏幕常亮
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         //弹窗
         progressDialog = new ProgressDialogUtil();
         //获取屏幕宽度和高度
@@ -263,6 +267,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         registerUsbBroadcast();
+        //eventbus注册
+//        EventBus.getDefault().register(this);
     }
 
 
@@ -283,6 +289,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mBroadcastReceiver);
+        //eventbus注销
+//        EventBus.getDefault().unregister(this);
     }
 
 

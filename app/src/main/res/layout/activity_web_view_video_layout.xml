@@ -7,7 +7,7 @@
     >
 
 
-    <VideoView
+    <com.pili.pldroid.player.widget.PLVideoTextureView
         android:id="@+id/vidioview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

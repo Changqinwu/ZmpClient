@@ -23,6 +23,7 @@ import com.dfqm.web.webdemo.download.DownloadState;
 import com.dfqm.web.webdemo.download.DownloadViewHolder;
 import com.dfqm.web.webdemo.utils.FileUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.ex.DbException;
 import org.xutils.view.annotation.Event;
@@ -257,6 +258,10 @@ public class DownloadActivity extends BaseActivity {
                 intent.putExtra(Constant.VIDEO_URL, download_list);
                 startActivity(intent);
                 finish();
+
+//                //通知前端下载完毕
+//                EventBus.getDefault().post(Constant.CHANGE);
+//                finish();
             }
         }
 

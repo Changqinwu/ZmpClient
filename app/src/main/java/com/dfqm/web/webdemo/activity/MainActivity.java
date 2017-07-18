@@ -14,26 +14,25 @@ import android.os.Bundle;
 import android.util.Log;
 
 import android.view.View;
-import android.webkit.JavascriptInterface;
 
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.dfqm.web.webdemo.API.zmpApi;
+import com.dfqm.web.webdemo.JsClass.JavaScriptInterface;
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
 import com.dfqm.web.webdemo.utils.CreatUniqueIdUtils;
-import com.dfqm.web.webdemo.utils.DownLoadVideoUtil;
-import com.dfqm.web.webdemo.utils.FileUtils;
 import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.tencent.smtt.sdk.WebView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_MAIN;
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_SID;
@@ -54,7 +53,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private View view;
     //打开本地视频列表
     private ImageView mImaOpenVideoList;
-    private JavaScriptInterface JSInterface;
     private MyBroadcastRecevier recevier;
     //下载视频列表
     private ArrayList<String> videoLists = new ArrayList<>();
@@ -133,15 +131,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //出错界面隐藏
         mImaError.setVisibility(View.GONE);
         mTvCount.setVisibility(View.GONE);
-        //测试轮播图加参数ID的webview
-//        LoadWebViewParamDataUtil mLoad = new LoadWebViewParamDataUtil(this, mWebView, mImaError, zmpApi.main_url, mTvCount, param);
         //测试轮播边放图片边放视频webview
         LoadWebViewDataUtil mLoad = new LoadWebViewDataUtil(this, mWebView, mImaError, zmpApi.main_url + param, mTvCount);
         mLoad.initData();
 
         // 设置js接口  第一个参数事件接口实例，第二个是实例在js中的别名，这个在js中会用到
-        JSInterface = new JavaScriptInterface(this); ////------
-        mWebView.addJavascriptInterface(JSInterface, "JSInterface");
+        JavaScriptInterface js = new JavaScriptInterface(this, videoLists);
+        mWebView.addJavascriptInterface(js, "JSInterface");
     }
 
     @Override
@@ -212,48 +208,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    //与H5页面交互类
-    public class JavaScriptInterface {
-        Context mContext;
+    //接受eventbus的消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String msg) {
+        if (Constant.PLAY_VIDEO_FINISH.equals(msg)) {
+            //网络视频播放完成
 
-        JavaScriptInterface(Context c) {
-            mContext = c;
-        }
-
-        //播放webview轮播视频
-        @JavascriptInterface
-        public void changeActivity(String param, String url) {
-//            ToastUtil.show(MainActivity.this, "参数" + param);
-            videoLists.clear();
-            if ("1".equals(param)) {
-                //关闭视频界面
-                Intent intent = new Intent(Constant.CLOSE_VIDEO);
-                sendBroadcast(intent);
-                //关闭下载界面
-                Intent intent2 = new Intent(Constant.CLOSE_DOWNLOAD_VIDEO);
-                sendBroadcast(intent2);
-
-            } else if ("2".equals(param)) {
-                //下载视频
-//                //关闭视频界面
-                Intent intent = new Intent(Constant.CLOSE_VIDEO);
-                sendBroadcast(intent);
-                //判读有没逗号字符
-                int p = url.indexOf(",");
-                if (p > 0) {
-                    String[] url_split = url.split(",");
-                    List<String> url_paths = Arrays.asList(url_split);
-                    videoLists.addAll(url_paths);
-                } else {
-                    videoLists.add(url);
-                }
-                DownLoadVideoUtil loadVideoUtil = new DownLoadVideoUtil();
-                loadVideoUtil.loadVideoListData(MainActivity.this, videoLists);
-            }
-//            ToastUtil.show(MainActivity.this, "列表数" + videoLists.size());
+        } else if (Constant.PLAY_VIDEO_ERROR.equals(msg)) {
+            //网络视频播放错误
         }
 
     }
+
 
     //退出app弹窗
     public void exitAppDialog(final Context context) {
@@ -285,7 +251,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //倒计时完
                 timeFinish = true;
             }
-
 
         };
         timer.start();// 开始计时

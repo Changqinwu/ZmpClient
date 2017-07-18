@@ -21,6 +21,5 @@ public class zmpApi {
     public static final String agreement_url = "http://999.zimeiping.com/wcq/useragreement/agreement.html";
     //视频列表
     public static final String video_url = "http://999.zimeiping.com/wcq/zmp/videolist.txt";
-    //轮播URL
-    public static final String lunbo_url = "http://999.zimeiping.com/hhw/zmp_app_banner/GetRotatorSetting.html";
+
 }

@@ -37,4 +37,10 @@ public class Constant {
     public static final String ACTION_SID = "action_sid";
     //网络重新连接时重新启动主界面
     public static final String ACTION_MAIN = "action_main";
+    //网络视频播放完成
+    public static final String PLAY_VIDEO_FINISH = "play_video_finish";
+    //网络视频播放出错
+        public static final String PLAY_VIDEO_ERROR = "play_video_error";
+
+
 }

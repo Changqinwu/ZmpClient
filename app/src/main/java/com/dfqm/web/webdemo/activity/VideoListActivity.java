@@ -1,14 +1,9 @@
 package com.dfqm.web.webdemo.activity;
 
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.hardware.usb.UsbManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,14 +15,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
-import com.dfqm.web.webdemo.utils.FileUtils;
 import com.dfqm.web.webdemo.utils.ProgressDialogUtil;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
-import com.dfqm.web.webdemo.utils.ToastUtil;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -201,17 +192,18 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
     class MyAdapter extends BaseAdapter {
         private final ArrayList<String> files;
         private final Context context;
+        private AnimationDrawable drawable;
 
         public MyAdapter(Context context, ArrayList<String> files) {
             this.files = files;
             this.context = context;
             isSelected = new HashMap<Integer, Boolean>();
             //初始化数据
-            initDate();
+            initData();
         }
 
         // 初始化isSelected的数据
-        private void initDate() {
+        private void initData() {
             for (int i = 0; i < files.size(); i++) {
                 getIsSelected().put(i, false);
             }
@@ -265,8 +257,10 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
                     //显示选中状态
                     if (isChecked) {
                         videoLists.add(s);
+                        drawable.start();
                     } else {
                         videoLists.remove(s);
+                        drawable.stop();
                     }
 
                     //取消按钮
