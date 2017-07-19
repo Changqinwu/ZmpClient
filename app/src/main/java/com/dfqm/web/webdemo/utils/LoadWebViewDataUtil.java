@@ -55,7 +55,6 @@ public class LoadWebViewDataUtil {
                 if (newProgress == 100) {
                     progressDialog.dismissProgressDialog();
                 } else {
-
                     progressDialog.showProgressDialog(context, "请稍后...");
                 }
 

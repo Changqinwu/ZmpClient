@@ -40,8 +40,6 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
     //空数据布局
     private RelativeLayout mRlEmpty;
     private ImageView mImaOpenVideoList;
-    //遍历的图片格式
-    private String[] fileType = new String[]{".jpg", ".png"};
     private String path;
     private ImageView mImaRightExitApp;
 
@@ -81,7 +79,7 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
 //        //遍历图片
 //        ArrayList<String> specificTypeOfFile = FileUtils.getSpecificTypeOfFile(this, fileType, Filelists);
         //设置适配器
-        MyAdapter adapter = new MyAdapter(this, Filelists);
+        MyAdapter adapter = new MyAdapter(Filelists);
         gv.setAdapter(adapter);
     }
 
@@ -158,7 +156,7 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
                 break;
             //选择列表
             case R.id.ima_open_videolist:
-                showSelecFileLists(this,this);
+                showSelecFileLists(this);
                 break;
             //右上角退出app
             case R.id.ima_rignt_top_exit_app:
@@ -177,12 +175,10 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
 
     class MyAdapter extends BaseAdapter {
         private final ArrayList<String> files;
-        private final Context context;
 
 
-        public MyAdapter(Context context, ArrayList<String> files) {
+        public MyAdapter(ArrayList<String> files) {
             this.files = files;
-            this.context = context;
             isSelected = new HashMap<Integer, Boolean>();
             //初始化数据
             initDate();
@@ -234,13 +230,13 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
             }
 
             File pic_file = new File(files.get(position));
-            Glide.with(context).load(pic_file).into(hodler.ima);
+            Glide.with(PictureListActivity.this).load(pic_file).into(hodler.ima);
             hodler.cb.setChecked(getIsSelected().get(position));
             hodler.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     getIsSelected().put(position, isChecked);
-                    String s = Filelists.get(position);
+                    String s = files.get(position);
                     //显示选中状态
                     if (isChecked) {
                         pictureLists.add(s);

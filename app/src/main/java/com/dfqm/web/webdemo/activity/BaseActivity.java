@@ -258,9 +258,9 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     //左下角点击选择usb图片，视频文件夹
-    public void showSelecFileLists(final Context context, final Activity activity){
-        SelectFolderUtils selectFolderUtils = new SelectFolderUtils();
-        selectFolderUtils.showSelecFileLists(context,activity);
+    public void showSelecFileLists(final Activity activity){
+//        SelectFolderUtils selectFolderUtils = new SelectFolderUtils();
+        SelectFolderUtils.showSelecFileLists(activity);
     }
 
     @Override

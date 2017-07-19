@@ -41,8 +41,6 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.bigkoo:convenientbanner:2.0.5'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'org.xutils:xutils:3.3.42'
-    compile 'cn.yipianfengye.android:zxing-library:2.1'
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.1.3'

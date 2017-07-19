@@ -19,6 +19,8 @@ import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
 import com.dfqm.web.webdemo.utils.ProgressDialogUtil;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
+import com.dfqm.web.webdemo.utils.ToastUtil;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,11 +42,8 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
     private TextView mTvPlay;
     //没数据空布局
     private RelativeLayout mRlEmpty;
-    //遍历的视频格式
-    private String[] fielType = new String[]{".3gp", ".mp4", ".mpg", ".mkv", ".avi", ".wmv", ".flv", ".mov"};
     private String path;
     private MyAdapter adapter;
-    private UsbBroadcastReceiver mBroadcastReceiver;
     private ProgressDialogUtil dialogUtil;
     private ImageView mImaExitRightApp;
 
@@ -109,11 +108,12 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
 
     private void initData() {
 
+
         //遍历出视频文件
 //        ArrayList<String> specificTypeOfFileLists = FileUtils.getSpecificTypeOfFile(this, fielType, Filelists);
         //设置适配器
         dialogUtil.dismissProgressDialog();
-        adapter = new MyAdapter(this, Filelists);
+        adapter = new MyAdapter(Filelists);
         lv.setAdapter(adapter);
     }
 
@@ -133,11 +133,11 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                ViewHolder holder = (ViewHolder) view.getTag();
-                holder.cb.toggle();
-                // 将CheckBox的选中状况记录下来
-                getIsSelected().put(position, holder.cb.isChecked());
 
+                    ViewHolder holder = (ViewHolder) view.getTag();
+                    holder.cb.toggle();
+                    // 将CheckBox的选中状况记录下来
+                    getIsSelected().put(position, holder.cb.isChecked());
             }
         });
     }
@@ -158,7 +158,7 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
 
             //立即播放
             case R.id.tv_play:
-                Intent intent = new Intent(this, PlayVideoActivity.class);
+                Intent intent = new Intent(VideoListActivity.this, PlayVideoActivity.class);
                 intent.putExtra(Constant.VIDEO_URL, videoLists);
                 startActivity(intent);
                 finish();
@@ -171,7 +171,7 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
 
             //选择列表
             case R.id.ima_open_videolist:
-                showSelecFileLists(this,this);
+                showSelecFileLists(this);
                 break;
 
             //右上角退出app
@@ -191,12 +191,9 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
 
     class MyAdapter extends BaseAdapter {
         private final ArrayList<String> files;
-        private final Context context;
-        private AnimationDrawable drawable;
 
-        public MyAdapter(Context context, ArrayList<String> files) {
+        public MyAdapter(ArrayList<String> files) {
             this.files = files;
-            this.context = context;
             isSelected = new HashMap<Integer, Boolean>();
             //初始化数据
             initData();
@@ -253,14 +250,12 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     getIsSelected().put(position, isChecked);
-                    String s = Filelists.get(position);
+                    String s = files.get(position);
                     //显示选中状态
                     if (isChecked) {
                         videoLists.add(s);
-                        drawable.start();
                     } else {
                         videoLists.remove(s);
-                        drawable.stop();
                     }
 
                     //取消按钮

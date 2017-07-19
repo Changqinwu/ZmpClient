@@ -11,6 +11,7 @@ import android.os.CountDownTimer;
 
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.util.Log;
 
 import android.view.View;
@@ -61,6 +62,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView mImaRightExitApp;
     //判断是否倒计时完
     private boolean timeFinish = true;
+    private ImageView mImaToSet;
 
 
     @Override
@@ -121,10 +123,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTvCount = (TextView) findViewById(R.id.tv_request_count_time);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
         mImaRightExitApp = (ImageView) findViewById(R.id.ima_rignt_top_exit_app);
+        mImaToSet = (ImageView) findViewById(R.id.ima_to_set);
         view = findViewById(R.id.activity_main);
         mImaExit.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
         mImaRightExitApp.setOnClickListener(this);
+        mImaToSet.setOnClickListener(this);
     }
 
     private void loadWebViewData(String param) {
@@ -147,13 +151,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.ima_exit_app:
                 exitAppDialog(this);
                 break;
-            //打开本地视频列表
+            //打开本地视频图片选择列表
             case R.id.ima_open_videolist:
-                showSelecFileLists(this, this);
+                showSelecFileLists(this);
                 break;
             //右上角退出弹窗
             case R.id.ima_rignt_top_exit_app:
                 exitAppDialog(this);
+                break;
+            //左上角调到设置界面
+            case R.id.ima_to_set:
+                Intent intent =  new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
                 break;
         }
     }

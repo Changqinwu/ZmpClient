@@ -18,20 +18,20 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        //启动app
-        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            Log.e("启动》》》", "启动成功。。。");
-            //延时10秒启动
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
-            }, 1000);
-
-        }
+//        //启动app
+//        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+//            Log.e("启动》》》", "启动成功。。。");
+//            //延时10秒启动
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Intent intent = new Intent(context, MainActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    context.startActivity(intent);
+//                }
+//            }, 1000);
+//
+//        }
 
     }
 

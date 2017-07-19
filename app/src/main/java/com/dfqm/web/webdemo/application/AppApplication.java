@@ -2,18 +2,10 @@ package com.dfqm.web.webdemo.application;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-
 import com.squareup.leakcanary.LeakCanary;
-import com.umeng.analytics.MobclickAgent;
-import com.uuzuche.lib_zxing.activity.ZXingLibrary;
-
 import org.xutils.BuildConfig;
 import org.xutils.x;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/1/9.
@@ -30,10 +22,6 @@ public class AppApplication extends Application{
         mAppApplication = this;
         //内存分析
         LeakCanary.install(this);
-        //二维码初始化
-        ZXingLibrary.initDisplayOpinion(this);
-
-        //xutils3初始化
         x.Ext.init(this);
         // 是否输出debug日志, 开启debug会影响性能.
         x.Ext.setDebug(BuildConfig.DEBUG);

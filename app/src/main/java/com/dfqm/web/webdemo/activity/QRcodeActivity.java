@@ -3,6 +3,7 @@ package com.dfqm.web.webdemo.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 
@@ -30,6 +31,7 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
     private ImageView mImaOpenVideoList;
     private long exitTime;
     private ImageView mImaRightExitApp;
+    private ImageView mImaToSet;
 
 
     @Override
@@ -70,11 +72,16 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
                 break;
             //打开列表选择
             case R.id.ima_open_videolist:
-                showSelecFileLists(this,this);
+                showSelecFileLists(this);
                 break;
             //右上角退出app
             case R.id.ima_rignt_top_exit_app:
                 exitAppDialog();
+                break;
+            //左上角跳转到设置界面
+            case R.id.ima_to_set:
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
                 break;
         }
 
@@ -119,10 +126,12 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
         mImaExit = (ImageView) findViewById(R.id.ima_exit_app);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
         mImaRightExitApp = (ImageView) findViewById(R.id.ima_rignt_top_exit_app);
+        mImaToSet = (ImageView) findViewById(R.id.ima_to_set);
 
         mImaRightExitApp.setOnClickListener(this);
         mImaExit.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
+        mImaToSet.setOnClickListener(this);
     }
 
 

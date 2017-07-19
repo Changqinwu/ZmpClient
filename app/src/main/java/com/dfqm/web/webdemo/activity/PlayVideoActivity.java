@@ -165,7 +165,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
                 break;
             //打开列表选择
             case R.id.ima_open_videolist:
-                showSelecFileLists(this,this);
+                showSelecFileLists(this);
                 break;
             //右上角退出app
             case R.id.ima_rignt_top_exit_app:

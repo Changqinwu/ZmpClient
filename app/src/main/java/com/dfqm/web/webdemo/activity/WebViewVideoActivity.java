@@ -12,6 +12,8 @@ import android.widget.VideoView;
 
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
+import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
+import com.dfqm.web.webdemo.utils.MD5Utils;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
@@ -38,7 +40,6 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
         initView();
         //获取数据
         initData();
-
 
     }
 
@@ -124,7 +125,7 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
                 break;
             //图片视频选择列表
             case R.id.ima_open_videolist:
-                showSelecFileLists(this,this);
+                showSelecFileLists(this);
                 break;
 
         }

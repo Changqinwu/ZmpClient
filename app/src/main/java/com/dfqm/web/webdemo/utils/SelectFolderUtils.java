@@ -11,6 +11,7 @@ import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.activity.MainActivity;
 import com.dfqm.web.webdemo.activity.PictureListActivity;
 import com.dfqm.web.webdemo.activity.VideoListActivity;
+import com.dfqm.web.webdemo.application.AppApplication;
 
 /**
  * Created by Administrator on 2017/5/15.
@@ -18,9 +19,9 @@ import com.dfqm.web.webdemo.activity.VideoListActivity;
 
 public class SelectFolderUtils {
 
-    public void showSelecFileLists(final Context context, final Activity activity){
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_select_dir_layout, null);
-        final AlertDialog alertDialog = new AlertDialog.Builder(context)
+    public static void showSelecFileLists(final Activity activity){
+        View view = LayoutInflater.from(activity).inflate(R.layout.dialog_select_dir_layout, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(activity)
                 .setTitle("请选择...")
                 .setView(view)
                 .create();
@@ -31,8 +32,8 @@ public class SelectFolderUtils {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(context, VideoListActivity.class);
-                context.startActivity(intent);
+                Intent intent = new Intent(activity, VideoListActivity.class);
+                activity.startActivity(intent);
                 activity.finish();
             }
         });
@@ -43,8 +44,8 @@ public class SelectFolderUtils {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(context, PictureListActivity.class);
-                context.startActivity(intent);
+                Intent intent = new Intent(activity, PictureListActivity.class);
+                activity.startActivity(intent);
                 activity.finish();
             }
         });
@@ -54,8 +55,8 @@ public class SelectFolderUtils {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(context, MainActivity.class);
-                context.startActivity(intent);
+                Intent intent = new Intent(activity, MainActivity.class);
+                activity.startActivity(intent);
                 activity.finish();
             }
         });
