@@ -1,40 +1,41 @@
 package com.dfqm.web.webdemo.activity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.VideoView;
 
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
-import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
-import com.dfqm.web.webdemo.utils.MD5Utils;
+import com.dfqm.web.webdemo.utils.SelectFolderUtils;
+import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import static com.dfqm.web.webdemo.constants.Constant.PLAY_VIDEO_ERROR;
 import static com.dfqm.web.webdemo.constants.Constant.PLAY_VIDEO_FINISH;
 
-public class WebViewVideoActivity extends BaseActivity implements View.OnClickListener {
+public class FtPlayVideoActivity extends BaseActivity implements View.OnClickListener {
 
     private PLVideoTextureView mVv;
-    private String param;
+    private String play_video_name;
     private ImageView mImaExit;
     private ImageView mImaOpenVideoList;
+    private Integer play_time;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view_video_layout);
+
 
         //初始化view
         initView();
@@ -47,13 +48,16 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
         //获取参数播放不同视频
         Intent intent = getIntent();
         if (intent != null) {
-            param = intent.getStringExtra(Constant.START_VIDEO_PARAM);
+            //视频名称
+            play_video_name = intent.getStringExtra(Constant.PLAY_VIDEO_NAME);
+            //视频播放时间
+            play_time = intent.getIntExtra(Constant.PLAY_TIME, 0);
         }
 
         //拿到文件路径播放视频
-//        mVideoUri = Uri.parse("/sdcard/MyVideo/"+param+".mp4");
+//        mVideoUri = Uri.parse("/sdcard/MyVideo/"+play_video_name+".mp4");
 //        mVv.setVideoURI(mVideoUri);
-        mVv.setVideoPath("/sdcard/MyVideo/" + param + ".mp4");
+        mVv.setVideoPath("/sdcard/zmpvideo/" + play_video_name);
 
         //开始播放
         mVv.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
@@ -67,11 +71,8 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
         mVv.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(PLMediaPlayer plMediaPlayer) {
-                //播放完成，通知前端播放下一个内容
-                EventBus.getDefault().post(PLAY_VIDEO_FINISH);
-                //关闭界面
-                finish();
-
+                //循环播放
+                mVv.start();
             }
         });
 
@@ -92,13 +93,21 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
             @Override
             public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
                 //视频出错，关闭界面，告诉前端播放下一个内容
-                ToastUtil.show(WebViewVideoActivity.this,"视频出错了...");
-                EventBus.getDefault().post(PLAY_VIDEO_ERROR);
+                ToastUtil.show(FtPlayVideoActivity.this, "视频出错了...");
+//                EventBus.getDefault().post(PLAY_VIDEO_ERROR);
                 return false;
             }
         });
 
-
+        //根据前端传过来的时间关闭视频
+        mVv.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mVv.removeCallbacks(this);
+                mVv.stopPlayback();
+                finish();
+            }
+        }, (play_time) * 1000);
 
     }
 
@@ -125,9 +134,21 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
                 break;
             //图片视频选择列表
             case R.id.ima_open_videolist:
-                showSelecFileLists(this);
+                SelectFolderUtils.showSelecFileLists(this);
                 break;
 
+        }
+    }
+
+    //接受eventbus的消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String msg) {
+        //视频播放完成，通知前端执行一个动作
+        if (Constant.CLOSE_VIDEO.equals(msg)) {
+            FtPlayVideoActivity.this.finish();
+            if (mVv != null) {
+                mVv.stopPlayback();
+            }
         }
     }
 }

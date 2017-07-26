@@ -16,9 +16,9 @@ public class Constant {
     public static final int AUTHORIZE_ID = 2;
 
     //播放视频param
-    public static final String START_VIDEO_PARAM = "param_start";
-    //轮播图播放过滤条件
-    public static final String PLAY = "play";
+    public static final String PLAY_VIDEO_NAME = "playvideo_name";
+    //视频播放的时间
+    public static final String PLAY_TIME = "play_time";
     //播放视频传参标识
     public static final String VIDEO_URL = "video_url";
     //关闭播放视频界面标识
@@ -40,7 +40,9 @@ public class Constant {
     //网络视频播放完成
     public static final String PLAY_VIDEO_FINISH = "play_video_finish";
     //网络视频播放出错
-        public static final String PLAY_VIDEO_ERROR = "play_video_error";
+    public static final String PLAY_VIDEO_ERROR = "play_video_error";
+    //版本类型，1代表个人版，2代表分天版
+    public static final String VERSION_TYPE = "version_type";
 
 
 }

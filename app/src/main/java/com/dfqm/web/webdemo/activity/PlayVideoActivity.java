@@ -12,8 +12,12 @@ import android.widget.Toast;
 
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
+import com.dfqm.web.webdemo.utils.SelectFolderUtils;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -40,6 +44,20 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
 
     }
 
+
+    //接受eventbus的消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String msg) {
+        if (Constant.PLAY_VIDEO_FINISH.equals(msg)) {
+            //网络视频播放完成
+
+        } else if (Constant.PLAY_VIDEO_ERROR.equals(msg)) {
+            //网络视频播放错误
+        }
+
+    }
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -55,6 +73,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
         unregisterReceiver(receiver);
         //关闭viedview,停止播放视频
         videoView.stopPlayback();
+        videoView.releaseSurfactexture();
     }
 
     @Override
@@ -84,7 +103,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
 
 
 
-        videoView.setOnInfoListener(new PLMediaPlayer.OnInfoListener() {
+        videoView.setOnInfoListener( new PLMediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(PLMediaPlayer plMediaPlayer, int what, int extra) {
 
@@ -95,6 +114,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
                     //如果视频角度是90度
                     //旋转视频
                     videoView.setDisplayOrientation(270);
+
                 }
 
                 return false;
@@ -165,7 +185,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
                 break;
             //打开列表选择
             case R.id.ima_open_videolist:
-                showSelecFileLists(this);
+                SelectFolderUtils.showSelecFileLists(this);
                 break;
             //右上角退出app
             case R.id.ima_rignt_top_exit_app:

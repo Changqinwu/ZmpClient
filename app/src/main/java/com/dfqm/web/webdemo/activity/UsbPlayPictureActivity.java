@@ -9,10 +9,11 @@ import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.callback.LocaImageHolderView;
+import com.dfqm.web.webdemo.utils.SelectFolderUtils;
 
 import java.util.ArrayList;
 
-public class PlayPictureActivity extends BaseActivity implements View.OnClickListener {
+public class UsbPlayPictureActivity extends BaseActivity implements View.OnClickListener {
 
     private ConvenientBanner mBanner;
     private ArrayList<String> pic_path;
@@ -78,7 +79,7 @@ public class PlayPictureActivity extends BaseActivity implements View.OnClickLis
                 break;
             //打开列表选择
             case R.id.ima_open_videolist:
-                showSelecFileLists(this);
+                SelectFolderUtils.showSelecFileLists(this);
                 break;
             //右上角退出app
             case R.id.ima_rignt_top_exit_app:

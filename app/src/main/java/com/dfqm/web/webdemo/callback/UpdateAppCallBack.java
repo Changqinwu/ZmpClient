@@ -9,22 +9,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dfqm.web.webdemo.activity.MainTainActivity;
-import com.dfqm.web.webdemo.activity.QRcodeActivity;
+import com.dfqm.web.webdemo.activity.QrCodeActivity;
 import com.dfqm.web.webdemo.activity.UpdateAppActivity;
 import com.dfqm.web.webdemo.constants.Constant;
 import com.dfqm.web.webdemo.entity.AuthorizeEntity;
+import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.entity.MaintainEntity;
-import com.dfqm.web.webdemo.entity.TextVideoBean;
 import com.dfqm.web.webdemo.entity.UpdateEntity;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-import org.xutils.http.RequestParams;
-import java.util.ArrayList;
+
+import org.greenrobot.eventbus.EventBus;
+
 import okhttp3.Call;
-import static com.dfqm.web.webdemo.API.zmpApi.authroize_url;
-import static com.dfqm.web.webdemo.API.zmpApi.maintain_url;
+import static com.dfqm.web.webdemo.API.ZmpApi.authroize_url;
+import static com.dfqm.web.webdemo.API.ZmpApi.maintain_url;
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_MAIN;
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_SID;
 import static com.dfqm.web.webdemo.constants.Constant.AUTHORIZE_ID;
@@ -42,21 +43,12 @@ public class UpdateAppCallBack extends StringCallback {
     private final String localversionname;
     private final int localversioncode;
     private final Context context;
-    private final Activity activity;
     private final String deviceId;
-    private ProgressDialog progressDialog;
-    private ProgressBar pb;
-    private TextView mTvPercent;
-    private TextView mTvTotal;
-    private RequestParams params;
-    private ArrayList<TextVideoBean.VideoBean> mVideoList = new ArrayList<>();
-    private Handler handler = new Handler();
 
     public UpdateAppCallBack(Context context, String localversionname, int localversioncode, Activity activity,String deviceId) {
         this.localversionname = localversionname;
         this.localversioncode = localversioncode;
         this.context = context;
-        this.activity = activity;
         this.deviceId = deviceId;
     }
 
@@ -145,7 +137,8 @@ public class UpdateAppCallBack extends StringCallback {
                             boolean success = authorizeEntity.isSuccess();
                             if (!success) {
                                 ToastUtil.show(context, "用户未授权...");
-                                Intent intent = new Intent(context, QRcodeActivity.class);
+                                //跳转到二维码界面
+                                Intent intent = new Intent(context, QrCodeActivity.class);
                                 intent.putExtra(DEVICEID, deviceId);
                                 context.startActivity(intent);
                             } else {
@@ -156,6 +149,8 @@ public class UpdateAppCallBack extends StringCallback {
                                     Intent intent = new Intent(ACTION_SID);
                                     intent.putExtra(SID, sid);
                                     context.sendBroadcast(intent);
+
+                                    EventBus.getDefault().post(new EventMessageBean(ACTION_SID,sid));
                                 }
                             }
 

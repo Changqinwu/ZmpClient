@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.application.AppApplication;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,28 +41,28 @@ public class ExitAppUtils {
                     public void onClick(DialogInterface dialog, int which) {
                         final String pwd = mEditPwd.getText().toString();
                         if (!pwd.equals("")) {
-//                            //如果输入的是df+整型的话进行存储
-//                            Pattern p = Pattern.compile("df_+[0-9]*");
-//                            Matcher m = p.matcher(pwd);
-//                            if (m.matches()) {
-//                                String str_df = pwd.replace("df_", "");
-//                                //判断是否符合屏幕ID规范
-//                                if (!str_df.equals("")) {
-////                                    int param = Integer.valueOf(str_df);
-////                                    SharedPreferencesUtils.setInt(context, "param", param);
-//                                } else {
-//                                    Toast.makeText(context, "输入有误...", Toast.LENGTH_SHORT).show();
-//                                }
-//                            } else {
-//                                Toast.makeText(context, "输入有误...", Toast.LENGTH_SHORT).show();
-//                            }
-                            if (pwd.equals(DefaultPwd)) {
+                            //如果输入的是df+整型的话进行存储
+                            Pattern p = Pattern.compile("df_+[0-9]*");
+                            Matcher m = p.matcher(pwd);
+                            if (m.matches()) {
+                                String str_df = pwd.replace("df_", "");
+                                //判断是否符合屏幕ID规范
+                                if (!str_df.equals("")) {
+                                    int param = Integer.valueOf(str_df);
+                                    SharedPreferencesUtils.setInt(context, "param", param);
+                                    //重新加载页面
+                                    EventBus.getDefault().post("reset");
+                                } else {
+                                    Toast.makeText(context, "输入有误...", Toast.LENGTH_SHORT).show();
+                                }
+                            } else  if (pwd.equals(DefaultPwd)) {
 //                                System.exit(0);
                                 //结束Activity& 从栈中移除该Activity
                                 AppApplication.getApp().exit();
                             }else {
                                 Toast.makeText(context, "输入有误...", Toast.LENGTH_SHORT).show();
                             }
+
                         } else {
                             Toast.makeText(context, "密码不能为空...", Toast.LENGTH_SHORT).show();
                         }

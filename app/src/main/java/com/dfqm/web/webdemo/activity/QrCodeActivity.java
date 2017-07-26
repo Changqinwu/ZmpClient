@@ -11,15 +11,17 @@ import android.widget.ImageView;
 
 import android.widget.TextView;
 
-import com.dfqm.web.webdemo.API.zmpApi;
+import com.dfqm.web.webdemo.API.ZmpApi;
 import com.dfqm.web.webdemo.R;
 
 import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
+import com.dfqm.web.webdemo.utils.SelectFolderUtils;
+
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_SID;
 import static com.dfqm.web.webdemo.constants.Constant.DEVICEID;
 import static com.dfqm.web.webdemo.constants.Constant.SID;
 
-public class QRcodeActivity extends BaseActivity implements View.OnClickListener {
+public class QrCodeActivity extends BaseActivity implements View.OnClickListener {
 
 
     private com.tencent.smtt.sdk.WebView mWebView;
@@ -51,7 +53,7 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initData(String deviceId) {
-        LoadWebViewDataUtil mLoad = new LoadWebViewDataUtil(this, mWebView, mImaError, zmpApi.qr_url+deviceId, mTvCount);
+        LoadWebViewDataUtil mLoad = new LoadWebViewDataUtil(this, mWebView, mImaError, ZmpApi.qr_url+deviceId, mTvCount);
         mLoad.initData();
 
         // 设置js接口  第一个参数事件接口实例，第二个是实例在js中的别名，这个在js中会用到
@@ -72,7 +74,7 @@ public class QRcodeActivity extends BaseActivity implements View.OnClickListener
                 break;
             //打开列表选择
             case R.id.ima_open_videolist:
-                showSelecFileLists(this);
+                SelectFolderUtils.showSelecFileLists(this);
                 break;
             //右上角退出app
             case R.id.ima_rignt_top_exit_app:

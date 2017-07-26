@@ -4,10 +4,10 @@ package com.dfqm.web.webdemo.API;
  * Created by Administrator on 2017/1/24.
  */
 
-public class zmpApi {
-
-    public static final String main_url = "http://i.zimeiping.com/Vshop/GetRotatorSetting.aspx?sid=";
-//    //更新appApi
+public class ZmpApi {
+    //主界面
+//    public static final String main_url = "http://i.zimeiping.com/Vshop/GetRotatorSetting.aspx?sid=";
+    //更新appApi
     public static final String update_url = "http://i.zimeiping.com/API/CheckUpdateZMP.Json";
     //是否维护界面
     public static final String maintain_url = "http://999.zimeiping.com/wcq/zmp/maintaintext.txt";
@@ -22,4 +22,6 @@ public class zmpApi {
     //视频列表
     public static final String video_url = "http://999.zimeiping.com/wcq/zmp/videolist.txt";
 
+    //测试界面
+    public static final String main_url = "http://999.zimeiping.com/hhw/zmp_app_banner/GetRotatorSetting.html?sid=";
 }

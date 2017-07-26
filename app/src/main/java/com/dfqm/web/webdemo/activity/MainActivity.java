@@ -20,12 +20,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.dfqm.web.webdemo.API.zmpApi;
-import com.dfqm.web.webdemo.JsClass.JavaScriptInterface;
+import com.dfqm.web.webdemo.API.ZmpApi;
+import com.dfqm.web.webdemo.JsClass.ToJavaScriptInterface;
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
+import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.utils.CreatUniqueIdUtils;
 import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
+import com.dfqm.web.webdemo.utils.SelectFolderUtils;
+import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.tencent.smtt.sdk.WebView;
 
@@ -94,7 +97,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             existUniqueId();
         }
 
+    }
 
+    //接受eventbus的消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventMessageBean eventMessageBean) {
+//        //请求webview，显示轮播方案
+//        loadWebViewData(sid);
+        String msgId = eventMessageBean.getMsgId();
+        if (msgId.equals(ACTION_SID)) {
+            ToastUtil.show(MainActivity.this,"显示轮播图...");
+        }
     }
 
     @Override
@@ -108,6 +121,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         filter.addAction(ACTION_SID);
         filter.addAction(ACTION_MAIN);
         registerReceiver(recevier, filter);
+
+
     }
 
     public void initData(String deviceId) {
@@ -136,11 +151,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mImaError.setVisibility(View.GONE);
         mTvCount.setVisibility(View.GONE);
         //测试轮播边放图片边放视频webview
-        LoadWebViewDataUtil mLoad = new LoadWebViewDataUtil(this, mWebView, mImaError, zmpApi.main_url + param, mTvCount);
+        LoadWebViewDataUtil mLoad = new LoadWebViewDataUtil(this, mWebView, mImaError, ZmpApi.main_url + param, mTvCount);
         mLoad.initData();
 
         // 设置js接口  第一个参数事件接口实例，第二个是实例在js中的别名，这个在js中会用到
-        JavaScriptInterface js = new JavaScriptInterface(this, videoLists);
+        ToJavaScriptInterface js = new ToJavaScriptInterface(this, videoLists);
         mWebView.addJavascriptInterface(js, "JSInterface");
     }
 
@@ -153,7 +168,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             //打开本地视频图片选择列表
             case R.id.ima_open_videolist:
-                showSelecFileLists(this);
+                SelectFolderUtils.showSelecFileLists(this);
                 break;
             //右上角退出弹窗
             case R.id.ima_rignt_top_exit_app:
@@ -161,7 +176,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             //左上角调到设置界面
             case R.id.ima_to_set:
-                Intent intent =  new Intent(Settings.ACTION_SETTINGS);
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
                 startActivity(intent);
                 break;
         }
@@ -177,6 +192,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         //注销广播
         unregisterReceiver(recevier);
+
     }
 
     class MyBroadcastRecevier extends BroadcastReceiver {
@@ -191,14 +207,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mWebView.loadUrl("javascript:androidJs(0)");
 
             } else if (Constant.CANNOT_CHANGE.equals(action)) {
+                ToastUtil.show(MainActivity.this, "不能修改...");
                 //不能修改播放方案，参数1
                 mWebView.loadUrl("javascript:androidJs(1)");
-            } else if (ACTION_SID.equals(action)) {
-                //已授权过，显示轮播界面
-                String sid = intent.getStringExtra(SID);
-                ToastUtil.show(context, "SID:" + sid);
-                //请求webview，显示轮播方案
-                loadWebViewData(sid);
+
             } else if (ACTION_MAIN.equals(action)) {
 //                //重新加载主界面
 //                initData(uniquePsuedoID);
@@ -211,22 +223,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     //开始倒计时
                     startCountDownTime(10);
                 }
-
+            } else if (Constant.ACTION_SID.equals(action)) {
+               //请求webview，显示轮播方案
+                String sid = intent.getStringExtra(SID);
+                loadWebViewData(sid);
             }
 
         }
-    }
-
-    //接受eventbus的消息
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(String msg) {
-        if (Constant.PLAY_VIDEO_FINISH.equals(msg)) {
-            //网络视频播放完成
-
-        } else if (Constant.PLAY_VIDEO_ERROR.equals(msg)) {
-            //网络视频播放错误
-        }
-
     }
 
 

@@ -1,8 +1,6 @@
 package com.dfqm.web.webdemo.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +16,15 @@ import android.widget.Toast;
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
 import com.dfqm.web.webdemo.utils.ProgressDialogUtil;
+import com.dfqm.web.webdemo.utils.SelectFolderUtils;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
-import com.dfqm.web.webdemo.utils.ToastUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VideoListActivity extends BaseActivity implements View.OnClickListener {
+public class UsbVideoListActivity extends BaseActivity implements View.OnClickListener {
 
 
     private static HashMap<Integer, Boolean> isSelected;
@@ -63,11 +61,11 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
     private void getUsbFolder() {
         dialogUtil = new ProgressDialogUtil();
         dialogUtil.showProgressDialog(this, "正在查找...");
-        String path = SharedPreferencesUtils.getString(VideoListActivity.this, "path", "");
+        String path = SharedPreferencesUtils.getString(UsbVideoListActivity.this, "path", "");
         if (!"".equals(path)) {
             //初始化文件列表
             Filelists.clear();
-            Toast.makeText(VideoListActivity.this, "保存了usb路径" + path + "", Toast.LENGTH_LONG).show();
+            Toast.makeText(UsbVideoListActivity.this, "保存了usb路径" + path + "", Toast.LENGTH_LONG).show();
             File file = new File(path);
             if (file != null) {
                 //遍历文件
@@ -158,7 +156,7 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
 
             //立即播放
             case R.id.tv_play:
-                Intent intent = new Intent(VideoListActivity.this, PlayVideoActivity.class);
+                Intent intent = new Intent(UsbVideoListActivity.this, PlayVideoActivity.class);
                 intent.putExtra(Constant.VIDEO_URL, videoLists);
                 startActivity(intent);
                 finish();
@@ -171,7 +169,7 @@ public class VideoListActivity extends BaseActivity implements View.OnClickListe
 
             //选择列表
             case R.id.ima_open_videolist:
-                showSelecFileLists(this);
+                SelectFolderUtils.showSelecFileLists(this);
                 break;
 
             //右上角退出app

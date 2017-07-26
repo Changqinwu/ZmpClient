@@ -2,15 +2,14 @@ package com.dfqm.web.webdemo.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.activity.MainActivity;
-import com.dfqm.web.webdemo.activity.PictureListActivity;
-import com.dfqm.web.webdemo.activity.VideoListActivity;
+import com.dfqm.web.webdemo.activity.UsbPictureListActivity;
+import com.dfqm.web.webdemo.activity.UsbVideoListActivity;
 import com.dfqm.web.webdemo.application.AppApplication;
 
 /**
@@ -32,9 +31,10 @@ public class SelectFolderUtils {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(activity, VideoListActivity.class);
+                Intent intent = new Intent(activity, UsbVideoListActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
+                AppApplication.getApp().clearActivity();
             }
         });
 
@@ -44,9 +44,11 @@ public class SelectFolderUtils {
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(activity, PictureListActivity.class);
+                Intent intent = new Intent(activity, UsbPictureListActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
+                AppApplication.getApp().clearActivity();
+
             }
         });
 
@@ -58,6 +60,7 @@ public class SelectFolderUtils {
                 Intent intent = new Intent(activity, MainActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
+                AppApplication.getApp().clearActivity();
             }
         });
 

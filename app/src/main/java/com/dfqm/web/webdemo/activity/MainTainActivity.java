@@ -8,7 +8,6 @@ import com.dfqm.web.webdemo.R;
 
 public class MainTainActivity extends BaseActivity {
 
-    private Handler handle = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,12 +19,6 @@ public class MainTainActivity extends BaseActivity {
     }
 
     private void reConnect() {
-        handle.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //更新qpp
-                updateApp("");
-            }
-        },300000);
+
     }
 }

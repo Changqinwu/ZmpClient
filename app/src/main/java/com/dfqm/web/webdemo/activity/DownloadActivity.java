@@ -43,6 +43,7 @@ public class DownloadActivity extends BaseActivity {
     //用于存储播放下载到本地的视频列表
     private ArrayList<String> download_list = new ArrayList<>();
     private DoanloadListReceiver receiver;
+    private int version_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,14 @@ public class DownloadActivity extends BaseActivity {
         //显示弹窗
         progressDialog.showProgressDialog(this, "正在准备视频...");
 
-        //发送广播，告诉后台正在进行加载视频，不能修改方案
-        Intent intent = new Intent(CANNOT_CHANGE);
-        sendBroadcast(intent);
+
+        //关闭分天版视频播放界面
+        EventBus.getDefault().post(Constant.CLOSE_VIDEO);
+
+        Intent intent1 = getIntent();
+        if (intent1 != null) {
+            version_type = intent1.getIntExtra(Constant.VERSION_TYPE,0);
+        }
 
         //xutils3初始化
         x.view().inject(this);
@@ -253,11 +259,17 @@ public class DownloadActivity extends BaseActivity {
                 Intent intent2 = new Intent(Constant.CHANGE);
                 sendBroadcast(intent2);
 
-                //下载完后进入播放视频页
-                Intent intent = new Intent(DownloadActivity.this, PlayVideoActivity.class);
-                intent.putExtra(Constant.VIDEO_URL, download_list);
-                startActivity(intent);
-                finish();
+                if (version_type == 1) {
+                    //个人版，下载完后进入播放视频页
+                    Intent intent = new Intent(DownloadActivity.this, PlayVideoActivity.class);
+                    intent.putExtra(Constant.VIDEO_URL, download_list);
+                    startActivity(intent);
+                    finish();
+                }else if(version_type == 2){
+                    //分天版，直接关闭下载
+                    finish();
+                }
+
 
 //                //通知前端下载完毕
 //                EventBus.getDefault().post(Constant.CHANGE);
@@ -277,7 +289,9 @@ public class DownloadActivity extends BaseActivity {
         }
 
         public void refresh() {
-            label.setText(downloadInfo.getLabel());
+            String url = downloadInfo.getUrl();
+            File file = new File(url);
+            label.setText(file.getName().toString());
             mstate.setText(downloadInfo.getState().toString());
             progressBar.setProgress(downloadInfo.getProgress());
             stopBtn.setVisibility(View.VISIBLE);

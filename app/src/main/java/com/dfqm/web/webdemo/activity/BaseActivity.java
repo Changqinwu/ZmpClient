@@ -1,7 +1,6 @@
 package com.dfqm.web.webdemo.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -18,11 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dfqm.web.webdemo.R;
@@ -30,17 +25,13 @@ import com.dfqm.web.webdemo.application.AppApplication;
 import com.dfqm.web.webdemo.callback.UpdateAppCallBack;
 import com.dfqm.web.webdemo.utils.ExitAppUtils;
 import com.dfqm.web.webdemo.utils.ProgressDialogUtil;
-import com.dfqm.web.webdemo.utils.SelectFolderUtils;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
-import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -49,7 +40,7 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
-import static com.dfqm.web.webdemo.API.zmpApi.update_url;
+import static com.dfqm.web.webdemo.API.ZmpApi.update_url;
 import static com.dfqm.web.webdemo.constants.Constant.VERSIONID;
 
 @RuntimePermissions
@@ -60,9 +51,7 @@ public class BaseActivity extends AppCompatActivity {
     private PackageInfo mPackageInfo;
     private String localVersionName;
     private int localversionCode;
-    public String DefaultPwd = "dfqm";
     public ProgressDialogUtil progressDialog;
-//    private AppApplication app;
     private UsbBroadcastReceiver mBroadcastReceiver;
     public String file_path;
 
@@ -89,6 +78,9 @@ public class BaseActivity extends AppCompatActivity {
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         //添加界面
         AppApplication.getApp().addActivity(this);
+
+        //eventbus注册
+        EventBus.getDefault().register(this);
     }
 
     private void getWindowsHeightWidth() {
@@ -105,23 +97,9 @@ public class BaseActivity extends AppCompatActivity {
             //再次询问
             showAskAgain();
         }
-//        if (isTablet(this)) {
-//            /**
-//             * 设置为横屏
-//             */
-//            if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//            }
-//        }
-
         super.onResume();
         //友盟统计
         MobclickAgent.onResume(this);
-    }
-
-    //是否宽屏
-    public static boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     @Override
@@ -129,6 +107,12 @@ public class BaseActivity extends AppCompatActivity {
         super.onPause();
         //友盟统计
         MobclickAgent.onPause(this);
+    }
+
+    //接受eventbus的消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String msg) {
+
     }
 
     @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
@@ -221,7 +205,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    public  void updateApp(String deviceId) {
+    public void updateApp(String deviceId) {
 
         //获取本地版本
         PackageManager manager = this.getPackageManager();
@@ -238,7 +222,7 @@ public class BaseActivity extends AppCompatActivity {
                 .id(VERSIONID)
                 .url(update_url)
                 .build()
-                .execute(new UpdateAppCallBack(this, localVersionName, localversionCode,this,deviceId));
+                .execute(new UpdateAppCallBack(this, localVersionName, localversionCode, this, deviceId));
     }
 
 
@@ -257,28 +241,18 @@ public class BaseActivity extends AppCompatActivity {
         exitAppUtils.dialogExit(context);
     }
 
-    //左下角点击选择usb图片，视频文件夹
-    public void showSelecFileLists(final Activity activity){
-//        SelectFolderUtils selectFolderUtils = new SelectFolderUtils();
-        SelectFolderUtils.showSelecFileLists(activity);
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
         registerUsbBroadcast();
-        //eventbus注册
-//        EventBus.getDefault().register(this);
     }
 
 
     //注册广播的方法
     public void registerUsbBroadcast() {
         IntentFilter iFilter = new IntentFilter();
-//        iFilter.addAction(Intent.ACTION_MEDIA_EJECT);
         iFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
-//        iFilter.addAction(Intent.ACTION_MEDIA_REMOVED);
-//        iFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
         iFilter.addDataScheme("file");
         mBroadcastReceiver = new UsbBroadcastReceiver();
         registerReceiver(mBroadcastReceiver, iFilter);
@@ -290,28 +264,22 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(mBroadcastReceiver);
         //eventbus注销
-//        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
     }
 
 
-    class UsbBroadcastReceiver extends BroadcastReceiver{
+
+    class UsbBroadcastReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-//            if (action.equals(Intent.ACTION_MEDIA_EJECT)) {
-//                //USB设备移除，更新UI,地址保存为空
-//                SharedPreferencesUtils.setString(context,"path","");
-//
-//            } else
-
-                if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
-//
+            //当有U盘插入时，系统接收到信息
+            if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
                 String path = intent.getDataString();
                 file_path = path.replace("file://", "");
-//                search(new File(path));
                 Toast.makeText(context, "usb路径" + file_path + "", Toast.LENGTH_LONG).show();
-                SharedPreferencesUtils.setString(context,"path",file_path);
+                SharedPreferencesUtils.setString(context, "path", file_path);
 
             }
         }

@@ -1,6 +1,5 @@
 package com.dfqm.web.webdemo.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,11 +12,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dfqm.web.webdemo.R;
-import com.dfqm.web.webdemo.utils.FileUtils;
+import com.dfqm.web.webdemo.utils.SelectFolderUtils;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 
 import java.io.File;
@@ -25,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PictureListActivity extends BaseActivity implements View.OnClickListener {
+public class UsbPictureListActivity extends BaseActivity implements View.OnClickListener {
 
 
     private static HashMap<Integer, Boolean> isSelected;
@@ -58,7 +56,7 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void getUsbFolder() {
-        String path = SharedPreferencesUtils.getString(PictureListActivity.this, "path", "");
+        String path = SharedPreferencesUtils.getString(UsbPictureListActivity.this, "path", "");
         if (!"".equals(path)) {
             //初始化文件列表
             Filelists.clear();
@@ -149,14 +147,14 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
                 break;
             //播放图片
             case R.id.tv_play:
-                Intent intent = new Intent(this, PlayPictureActivity.class);
+                Intent intent = new Intent(this, UsbPlayPictureActivity.class);
                 intent.putExtra("path", pictureLists);
                 startActivity(intent);
                 finish();
                 break;
             //选择列表
             case R.id.ima_open_videolist:
-                showSelecFileLists(this);
+                SelectFolderUtils.showSelecFileLists(this);
                 break;
             //右上角退出app
             case R.id.ima_rignt_top_exit_app:
@@ -230,7 +228,7 @@ public class PictureListActivity extends BaseActivity implements View.OnClickLis
             }
 
             File pic_file = new File(files.get(position));
-            Glide.with(PictureListActivity.this).load(pic_file).into(hodler.ima);
+            Glide.with(UsbPictureListActivity.this).load(pic_file).into(hodler.ima);
             hodler.cb.setChecked(getIsSelected().get(position));
             hodler.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
