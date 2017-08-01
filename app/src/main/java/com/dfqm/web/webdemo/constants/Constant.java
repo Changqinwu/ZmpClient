@@ -43,6 +43,11 @@ public class Constant {
     public static final String PLAY_VIDEO_ERROR = "play_video_error";
     //版本类型，1代表个人版，2代表分天版
     public static final String VERSION_TYPE = "version_type";
-
+    //版本类型，1代表个人版，2代表分天版
+    public static final String STYPE = "stype";
+    //首页重新加载url标识
+    public static final String RLOAD = "rload";
+    //如果只有一个视频传递过来
+    public static final String ADJUST_ONE_VIDEO = "adjust_one_video";
 
 }

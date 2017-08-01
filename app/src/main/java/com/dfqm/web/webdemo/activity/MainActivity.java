@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -28,7 +29,6 @@ import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.utils.CreatUniqueIdUtils;
 import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
 import com.dfqm.web.webdemo.utils.SelectFolderUtils;
-import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.tencent.smtt.sdk.WebView;
 
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_MAIN;
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_SID;
 import static com.dfqm.web.webdemo.constants.Constant.CANNOT_CHANGE;
+import static com.dfqm.web.webdemo.constants.Constant.RLOAD;
 import static com.dfqm.web.webdemo.constants.Constant.SID;
 
 
@@ -66,6 +67,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     //判断是否倒计时完
     private boolean timeFinish = true;
     private ImageView mImaToSet;
+    private RelativeLayout mRlVertical;
+    private RelativeLayout mRlHorizontal;
+    private WebView mWvVertical;
+    private WebView mWvHorizontal;
 
 
     @Override
@@ -102,13 +107,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     //接受eventbus的消息
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventMessageBean eventMessageBean) {
-//        //请求webview，显示轮播方案
-//        loadWebViewData(sid);
+
         String msgId = eventMessageBean.getMsgId();
-        if (msgId.equals(ACTION_SID)) {
-            ToastUtil.show(MainActivity.this,"显示轮播图...");
+        if (msgId.equals(RLOAD)) {
+            //重新生成唯一标识
+            existUniqueId();
+//            ToastUtil.show(MainActivity.this,"重新加载Url...");
+        }else if (screenDirection && msgId.equals("2")) {
+
+            //横屏并且是分天版
+            mRlVertical.setVisibility(View.VISIBLE);
+            mRlHorizontal.setVisibility(View.GONE);
+            //设置wenview
+            setWebview(mWvVertical);
+//            ToastUtil.show(MainActivity.this,"横屏二维码显示");
+
+        }else if (!screenDirection && msgId.equals("2")) {
+            //竖屏并且是分天版
+            mRlVertical.setVisibility(View.GONE);
+            mRlHorizontal.setVisibility(View.VISIBLE);
+            //设置wenview
+            setWebview(mWvHorizontal);
+//            ToastUtil.show(MainActivity.this,"竖屏二维码显示");
         }
+
     }
+
 
     @Override
     protected void onStart() {
@@ -140,18 +164,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mImaRightExitApp = (ImageView) findViewById(R.id.ima_rignt_top_exit_app);
         mImaToSet = (ImageView) findViewById(R.id.ima_to_set);
         view = findViewById(R.id.activity_main);
+        mRlVertical = (RelativeLayout) findViewById(R.id.rl_webview_vertical);
+        mRlHorizontal = (RelativeLayout) findViewById(R.id.rl_webview_horizontal);
+        mWvVertical = (WebView) findViewById(R.id.wv_vertical);
+        mWvHorizontal = (WebView) findViewById(R.id.wv_horizontal);
+
         mImaExit.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
         mImaRightExitApp.setOnClickListener(this);
         mImaToSet.setOnClickListener(this);
+        mRlVertical.setVisibility(View.GONE);
+        mRlHorizontal.setVisibility(View.GONE);
     }
 
-    private void loadWebViewData(String param) {
+    private void loadWebViewData(String param, String stype) {
+
         //出错界面隐藏
         mImaError.setVisibility(View.GONE);
         mTvCount.setVisibility(View.GONE);
         //测试轮播边放图片边放视频webview
-        LoadWebViewDataUtil mLoad = new LoadWebViewDataUtil(this, mWebView, mImaError, ZmpApi.main_url + param, mTvCount);
+        LoadWebViewDataUtil mLoad = new LoadWebViewDataUtil(this, mWebView, mImaError, ZmpApi.main_url + param + "&stype=" + stype, mTvCount);
         mLoad.initData();
 
         // 设置js接口  第一个参数事件接口实例，第二个是实例在js中的别名，这个在js中会用到
@@ -207,9 +239,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mWebView.loadUrl("javascript:androidJs(0)");
 
             } else if (Constant.CANNOT_CHANGE.equals(action)) {
-                ToastUtil.show(MainActivity.this, "不能修改...");
                 //不能修改播放方案，参数1
                 mWebView.loadUrl("javascript:androidJs(1)");
+                ToastUtil.show(MainActivity.this,"不能修改方案");
 
             } else if (ACTION_MAIN.equals(action)) {
 //                //重新加载主界面
@@ -221,12 +253,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 if (timeFinish) {
                     timeFinish = false;
                     //开始倒计时
-                    startCountDownTime(10);
+                    startCountDownTime(5);
                 }
             } else if (Constant.ACTION_SID.equals(action)) {
-               //请求webview，显示轮播方案
+                //请求webview，显示轮播方案
                 String sid = intent.getStringExtra(SID);
-                loadWebViewData(sid);
+                String stype = intent.getStringExtra(Constant.STYPE);
+                loadWebViewData(sid, stype);
             }
 
         }
@@ -254,7 +287,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onTick(long millisUntilFinished) {
                 //每隔countDownInterval秒会回调一次onTick()方法
                 Log.e("倒计时", millisUntilFinished + "");
-                mTvCount.setText(millisUntilFinished / 1000 + "\n" + "秒后尝试重新连接~~~");
+                mTvCount.setText("网络异常，请耐心等待" + "\n" + millisUntilFinished / 1000 + "秒后重新加载网络...");
             }
 
             @Override

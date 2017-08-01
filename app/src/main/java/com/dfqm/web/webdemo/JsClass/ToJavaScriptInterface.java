@@ -6,6 +6,7 @@ import android.webkit.JavascriptInterface;
 
 import com.dfqm.web.webdemo.activity.FtPlayVideoActivity;
 import com.dfqm.web.webdemo.constants.Constant;
+import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.utils.DownLoadVideoUtil;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 
@@ -34,6 +35,8 @@ public class ToJavaScriptInterface {
     @JavascriptInterface
     public void changeActivity(String param, String url, int type) {
         videoLists.clear();
+        //如果是分天版，显示竖屏或者横屏二维码
+        EventBus.getDefault().post(new EventMessageBean(String.valueOf(type),Constant.VERSION_TYPE));
         if ("1".equals(param)) {
             //关闭个人版视频界面
             Intent intent = new Intent(Constant.CLOSE_VIDEO);
@@ -41,8 +44,8 @@ public class ToJavaScriptInterface {
             //关闭下载界面
             Intent intent2 = new Intent(Constant.CLOSE_DOWNLOAD_VIDEO);
             mContext.sendBroadcast(intent2);
-            //关闭分天版视频界面
-            EventBus.getDefault().post(Constant.CLOSE_VIDEO);
+//            //关闭分天版视频界面
+//            EventBus.getDefault().post(new EventMessageBean(Constant.CLOSE_VIDEO,Constant.CLOSE_VIDEO));
             //分天版
             if (type == 2 && !url.equals("null")) {
 
@@ -50,9 +53,7 @@ public class ToJavaScriptInterface {
             }
 
         } else if ("2".equals(param)) {
-
             downloadVideo(url, type);
-
         }
 //            ToastUtil.show(MainActivity.this, "列表数" + videoLists.size());
     }
@@ -82,19 +83,16 @@ public class ToJavaScriptInterface {
 
     //分天版播放视频
     @JavascriptInterface
-    public void toPlayVideo(String url_name, int playTime) {
+    public void toPlayVideo(String url_name, int playTime,String param) {
         if (url_name != null) {
+//            ToastUtil.show(mContext,"显示："+url_name);
             Intent intent = new Intent(mContext, FtPlayVideoActivity.class);
             intent.putExtra(Constant.PLAY_VIDEO_NAME, url_name);
             intent.putExtra(Constant.PLAY_TIME, playTime);
+            intent.putExtra(Constant.ADJUST_ONE_VIDEO, param);
             mContext.startActivity(intent);
         }
     }
 
-
-    @JavascriptInterface
-    public void showTime(int param) {
-        ToastUtil.show(mContext,"显示："+param);
-    }
 
 }

@@ -6,7 +6,7 @@ package com.dfqm.web.webdemo.API;
 
 public class ZmpApi {
     //主界面
-//    public static final String main_url = "http://i.zimeiping.com/Vshop/GetRotatorSetting.aspx?sid=";
+    public static final String main_url = "http://i.zimeiping.com/Vshop/GetRotatorSetting.aspx?sid=";
     //更新appApi
     public static final String update_url = "http://i.zimeiping.com/API/CheckUpdateZMP.Json";
     //是否维护界面
@@ -23,5 +23,8 @@ public class ZmpApi {
     public static final String video_url = "http://999.zimeiping.com/wcq/zmp/videolist.txt";
 
     //测试界面
-    public static final String main_url = "http://999.zimeiping.com/hhw/zmp_app_banner/GetRotatorSetting.html?sid=";
+//    public static final String main_url = "http://999.zimeiping.com/hhw/zmp_app_banner/GetRotatorSetting.html?sid=";
+
+    //竖屏横屏二维码
+    public static final String horizontal_vertical_url = "http://999.zimeiping.com/hhw/zmp_app_banner/ScreenDetailQRImage.html";
 }

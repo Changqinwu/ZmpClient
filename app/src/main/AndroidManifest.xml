@@ -26,6 +26,7 @@
         android:icon="@mipmap/zmp_app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:hardwareAccelerated="false"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.MainActivity"

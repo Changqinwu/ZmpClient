@@ -32,7 +32,6 @@ import org.xutils.x;
 import java.io.File;
 import java.util.ArrayList;
 
-import static com.dfqm.web.webdemo.constants.Constant.CANNOT_CHANGE;
 
 
 public class DownloadActivity extends BaseActivity {
@@ -254,7 +253,6 @@ public class DownloadActivity extends BaseActivity {
             downloadListAdapter.notifyDataSetChanged();
             refresh();
             if (downloadManager.getDownloadListCount() == 0) {
-
                 //下载完成发送广播
                 Intent intent2 = new Intent(Constant.CHANGE);
                 sendBroadcast(intent2);
@@ -269,8 +267,6 @@ public class DownloadActivity extends BaseActivity {
                     //分天版，直接关闭下载
                     finish();
                 }
-
-
 //                //通知前端下载完毕
 //                EventBus.getDefault().post(Constant.CHANGE);
 //                finish();

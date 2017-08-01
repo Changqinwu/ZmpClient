@@ -34,7 +34,6 @@ public class SelectFolderUtils {
                 Intent intent = new Intent(activity, UsbVideoListActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
-                AppApplication.getApp().clearActivity();
             }
         });
 
@@ -47,7 +46,6 @@ public class SelectFolderUtils {
                 Intent intent = new Intent(activity, UsbPictureListActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
-                AppApplication.getApp().clearActivity();
 
             }
         });
@@ -60,7 +58,6 @@ public class SelectFolderUtils {
                 Intent intent = new Intent(activity, MainActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
-                AppApplication.getApp().clearActivity();
             }
         });
 

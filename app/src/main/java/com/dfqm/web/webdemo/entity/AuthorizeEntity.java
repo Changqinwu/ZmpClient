@@ -14,6 +14,15 @@ public class AuthorizeEntity {
 
     private boolean success;
     private String sid;
+    private String stype;
+
+    public String getStype() {
+        return stype;
+    }
+
+    public void setStype(String stype) {
+        this.stype = stype;
+    }
 
     public boolean isSuccess() {
         return success;

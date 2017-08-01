@@ -16,6 +16,7 @@ import com.dfqm.web.webdemo.entity.AuthorizeEntity;
 import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.entity.MaintainEntity;
 import com.dfqm.web.webdemo.entity.UpdateEntity;
+import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -32,6 +33,7 @@ import static com.dfqm.web.webdemo.constants.Constant.AUTHORIZE_ID;
 import static com.dfqm.web.webdemo.constants.Constant.DEVICEID;
 import static com.dfqm.web.webdemo.constants.Constant.MIANTAINID;
 import static com.dfqm.web.webdemo.constants.Constant.SID;
+import static com.dfqm.web.webdemo.constants.Constant.STYPE;
 import static com.dfqm.web.webdemo.constants.Constant.UPDATE_ADDRESS;
 
 /**
@@ -135,6 +137,7 @@ public class UpdateAppCallBack extends StringCallback {
                             Gson gson = new Gson();
                             AuthorizeEntity authorizeEntity = gson.fromJson(response, AuthorizeEntity.class);
                             boolean success = authorizeEntity.isSuccess();
+
                             if (!success) {
                                 ToastUtil.show(context, "用户未授权...");
                                 //跳转到二维码界面
@@ -144,13 +147,16 @@ public class UpdateAppCallBack extends StringCallback {
                             } else {
 //                                ToastUtil.show(context, "用户已授权...");
                                 String sid = authorizeEntity.getSid();
-                                if (!"".equals(sid)) {
+                                String stype = authorizeEntity.getStype();
+                                //保存Sid到本地
+                                SharedPreferencesUtils.setString(context,SID,sid);
+                                SharedPreferencesUtils.setString(context,STYPE,stype);
+                                if (!"".equals(sid) && !"".equals(stype)) {
                                     //显示主界面
                                     Intent intent = new Intent(ACTION_SID);
                                     intent.putExtra(SID, sid);
+                                    intent.putExtra(Constant.STYPE, stype);
                                     context.sendBroadcast(intent);
-
-                                    EventBus.getDefault().post(new EventMessageBean(ACTION_SID,sid));
                                 }
                             }
 
