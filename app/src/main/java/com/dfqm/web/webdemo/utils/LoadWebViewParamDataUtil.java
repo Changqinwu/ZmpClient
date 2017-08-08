@@ -111,7 +111,7 @@ public class LoadWebViewParamDataUtil {
             public void onTick(long millisUntilFinished) {
                 //每隔countDownInterval秒会回调一次onTick()方法
                 Log.e("倒计时",millisUntilFinished+"");
-                mTvCount.setText(millisUntilFinished/1000+"\n"+"秒后尝试重新连接~~~");
+                mTvCount.setText(millisUntilFinished/1000+"\n"+"秒后重新连接网络~~~");
             }
 
             @Override

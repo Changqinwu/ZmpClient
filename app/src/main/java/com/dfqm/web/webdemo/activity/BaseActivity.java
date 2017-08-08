@@ -9,23 +9,32 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.dfqm.web.webdemo.API.ZmpApi;
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.application.AppApplication;
 import com.dfqm.web.webdemo.callback.UpdateAppCallBack;
 import com.dfqm.web.webdemo.utils.ExitAppUtils;
 import com.dfqm.web.webdemo.utils.ProgressDialogUtil;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
+import com.dfqm.web.webdemo.utils.ToastUtil;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -54,6 +63,8 @@ public class BaseActivity extends AppCompatActivity {
     public ProgressDialogUtil progressDialog;
     private UsbBroadcastReceiver mBroadcastReceiver;
     public String file_path;
+    //判断屏幕是否横屏
+    public boolean screenDirection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +81,16 @@ public class BaseActivity extends AppCompatActivity {
         progressDialog = new ProgressDialogUtil();
         //获取屏幕宽度和高度
         getWindowsHeightWidth();
+        //判断屏幕方向
+        screenDirection();
         //权限初始化
         BaseActivityPermissionsDispatcher.showPermissionWithCheck(this);
         //友盟统计
         MobclickAgent.setDebugMode(true);
         MobclickAgent.openActivityDurationTrack(false);
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
-        //添加界面
-        AppApplication.getApp().addActivity(this);
+//        //添加界面
+//        AppApplication.getApp().addActivity(this);
 
         //eventbus注册
         EventBus.getDefault().register(this);
@@ -88,7 +101,21 @@ public class BaseActivity extends AppCompatActivity {
         int width = wm.getDefaultDisplay().getWidth();
         int height = wm.getDefaultDisplay().getHeight();
         Log.e("屏幕高和宽", "宽度" + width + ">>>>>" + "高度" + height);
+
     }
+
+    public void screenDirection() {
+        //横屏
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            screenDirection = true;
+        }
+        //竖屏
+        else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            screenDirection = false;
+        }
+    }
+
+
 
     @Override
     protected void onResume() {
@@ -278,10 +305,41 @@ public class BaseActivity extends AppCompatActivity {
             if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
                 String path = intent.getDataString();
                 file_path = path.replace("file://", "");
-                Toast.makeText(context, "usb路径" + file_path + "", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "检测到U盘:" + file_path + "", Toast.LENGTH_LONG).show();
                 SharedPreferencesUtils.setString(context, "path", file_path);
 
             }
         }
+    }
+
+    public void setWebview(WebView webview,String sid) {
+        // 通过设置WebView的settings来实现
+        WebSettings settings = webview.getSettings();
+        webview.setBackgroundColor(0);
+        webview.getBackground().setAlpha(0);
+        settings.setJavaScriptEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);//只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);//设置js可以直接打开窗口，如window.open()，默认为false
+        settings.setSupportZoom(true);//是否可以缩放，默认true
+        settings.setBuiltInZoomControls(false);//是否显示缩放按钮，默认false
+        settings.setUseWideViewPort(true);//设置此属性，可任意比例缩放。大视图模式
+        settings.setLoadWithOverviewMode(true);//和setUseWideViewPort(true)一起解决网页自适应问题
+        settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
+        // 支持多窗口
+        settings.setSupportMultipleWindows(true);
+
+        String cacheDirPath = this.getApplicationContext().getDir("zmpcache", Context.MODE_PRIVATE).getPath();
+        settings.setAppCachePath(cacheDirPath);
+        // 1. 设置缓存路径
+
+        settings.setAppCacheMaxSize(20*1024*1024);
+        // 2. 设置缓存大小
+
+        settings.setAppCacheEnabled(true); // 3. 开启Application Cache存储机制
+        settings.setDomStorageEnabled(true);
+        settings.setAllowFileAccess(true);
+
+        webview.loadUrl(ZmpApi.horizontal_vertical_url+sid);
+
     }
 }

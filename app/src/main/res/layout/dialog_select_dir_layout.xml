@@ -19,7 +19,7 @@
             android:padding="5dp"
             android:layout_margin="10dp"
             android:layout_height="wrap_content"
-            android:text="视频列表"/>
+            android:text="U盘视频列表"/>
 
         <TextView
             android:id="@+id/tv_pic"
@@ -31,7 +31,7 @@
             android:layout_margin="10dp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"
-            android:text="图片列表"/>
+            android:text="U盘图片列表"/>
 
         <TextView
             android:id="@+id/tv_main"
@@ -43,7 +43,7 @@
             android:layout_margin="10dp"
             android:textColor="@color/white"
             android:layout_height="wrap_content"
-            android:text="网络轮播"/>
+            android:text="主界面"/>
     </LinearLayout>
 
 </RelativeLayout>

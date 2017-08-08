@@ -97,7 +97,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onPrepared(PLMediaPlayer plMediaPlayer) {
                 //开始播放
-                plMediaPlayer.start();
+                videoView.start();
             }
         });
 

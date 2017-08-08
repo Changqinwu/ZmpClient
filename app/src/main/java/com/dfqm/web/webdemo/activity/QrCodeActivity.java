@@ -14,12 +14,15 @@ import android.widget.TextView;
 import com.dfqm.web.webdemo.API.ZmpApi;
 import com.dfqm.web.webdemo.R;
 
+import com.dfqm.web.webdemo.constants.Constant;
 import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
 import com.dfqm.web.webdemo.utils.SelectFolderUtils;
+import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_SID;
 import static com.dfqm.web.webdemo.constants.Constant.DEVICEID;
 import static com.dfqm.web.webdemo.constants.Constant.SID;
+import static com.dfqm.web.webdemo.constants.Constant.STYPE;
 
 public class QrCodeActivity extends BaseActivity implements View.OnClickListener {
 
@@ -106,12 +109,15 @@ public class QrCodeActivity extends BaseActivity implements View.OnClickListener
 
         //跳到主界面
         @JavascriptInterface
-        public void changeActivity(String param,String sid) {
+        public void changeActivity(String param,String sid,String stype) {
 
             if ("1".equals(param)) {
+                //保存stype
+                SharedPreferencesUtils.setString(mContext, Constant.STYPE,stype);
                 //显示主界面
                 Intent intent = new Intent(ACTION_SID);
                 intent.putExtra(SID, sid);
+                intent.putExtra(STYPE, stype);
                 sendBroadcast(intent);
                 finish();
             }

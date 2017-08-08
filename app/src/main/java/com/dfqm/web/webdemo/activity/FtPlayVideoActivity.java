@@ -1,26 +1,23 @@
 package com.dfqm.web.webdemo.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.constants.Constant;
+import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.utils.SelectFolderUtils;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
-
-import org.greenrobot.eventbus.EventBus;
+import com.tencent.smtt.sdk.WebView;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import static com.dfqm.web.webdemo.constants.Constant.PLAY_VIDEO_ERROR;
-import static com.dfqm.web.webdemo.constants.Constant.PLAY_VIDEO_FINISH;
 
 public class FtPlayVideoActivity extends BaseActivity implements View.OnClickListener {
 
@@ -29,6 +26,12 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
     private ImageView mImaExit;
     private ImageView mImaOpenVideoList;
     private Integer play_time;
+    private String param;
+    private RelativeLayout mRlVertical;
+    private RelativeLayout mRlHorizontal;
+    private WebView mWvVertical;
+    private WebView mWvHorizontal;
+    private int version_type;
 
 
     @Override
@@ -36,9 +39,10 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view_video_layout);
 
-
         //初始化view
         initView();
+        //判断显示是否横竖屏二维码
+        showQr();
         //获取数据
         initData();
 
@@ -52,6 +56,8 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
             play_video_name = intent.getStringExtra(Constant.PLAY_VIDEO_NAME);
             //视频播放时间
             play_time = intent.getIntExtra(Constant.PLAY_TIME, 0);
+            //只有一个视频
+            param = intent.getStringExtra(Constant.ADJUST_ONE_VIDEO);
         }
 
         //拿到文件路径播放视频
@@ -99,24 +105,57 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
             }
         });
 
-        //根据前端传过来的时间关闭视频
-        mVv.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mVv.removeCallbacks(this);
-                mVv.stopPlayback();
-                finish();
-            }
-        }, (play_time) * 1000);
+        //如果视频多于1个，param为0，隔个play_time轮回播放
+        if ("0".equals(param)) {
+            //根据前端传过来的时间关闭视频
+            mVv.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mVv.removeCallbacks(this);
+                    mVv.stopPlayback();
+                    finish();
+                }
+            }, (play_time) * 1000);
+        }
 
+    }
+
+    private void showQr() {
+        //获取版本类型
+        version_type = SharedPreferencesUtils.getInt(this, Constant.VERSION_TYPE, 1);
+        //获取sid
+        String sid = SharedPreferencesUtils.getString(this, Constant.SID, "1");
+        if (screenDirection && version_type == 2) {
+            //横屏并且是分天版
+            mRlVertical.setVisibility(View.VISIBLE);
+            mRlHorizontal.setVisibility(View.GONE);
+            //设置wenview
+            setWebview(mWvVertical,sid);
+//            ToastUtil.show(MainActivity.this,"横屏二维码显示");
+        } else if (!screenDirection && version_type == 2) {
+            //竖屏并且是分天版
+            mRlVertical.setVisibility(View.GONE);
+            mRlHorizontal.setVisibility(View.VISIBLE);
+            //设置wenview
+            setWebview(mWvHorizontal,sid);
+//            ToastUtil.show(MainActivity.this,"竖屏二维码显示");
+        }
     }
 
     private void initView() {
         mVv = (PLVideoTextureView) findViewById(R.id.vidioview);
         mImaExit = (ImageView) findViewById(R.id.ima_exit_app);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
+        mRlVertical = (RelativeLayout) findViewById(R.id.rl_webview_vertical);
+        mRlHorizontal = (RelativeLayout) findViewById(R.id.rl_webview_horizontal);
+        mWvVertical = (WebView) findViewById(R.id.wv_vertical);
+        mWvHorizontal = (WebView) findViewById(R.id.wv_horizontal);
+
         mImaExit.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
+
+        mRlVertical.setVisibility(View.GONE);
+        mRlHorizontal.setVisibility(View.GONE);
     }
 
     @Override
@@ -142,9 +181,11 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
 
     //接受eventbus的消息
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(String msg) {
-        //视频播放完成，通知前端执行一个动作
-        if (Constant.CLOSE_VIDEO.equals(msg)) {
+    public void onMessageEvent(EventMessageBean eventMessageBean) {
+
+        String msgId = eventMessageBean.getMsgId();
+       if (msgId.equals(Constant.CLOSE_VIDEO)) {
+            //关闭界面
             FtPlayVideoActivity.this.finish();
             if (mVv != null) {
                 mVv.stopPlayback();
