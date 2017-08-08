@@ -56,9 +56,15 @@ public class ExitAppUtils {
 //                                    Toast.makeText(context, "输入有误...", Toast.LENGTH_SHORT).show();
 //                                }
                             } else if (pwd.equals(DefaultPwd)) {
+<<<<<<< HEAD
                                 System.exit(0);
                                 //结束Activity& 从栈中移除该Activity
 //                                AppApplication.getApp().exit();
+=======
+//                                System.exit(0);
+                                //结束Activity& 从栈中移除该Activity
+                                AppApplication.getApp().exit();
+>>>>>>> origin/master
                             }else if (pwd.equals("123456")) {
                                 //删除唯一识别码
                                 FileUtils.RecursionDeleteFile(new File("/sdcard/zmpfile/uniqueId.txt"));

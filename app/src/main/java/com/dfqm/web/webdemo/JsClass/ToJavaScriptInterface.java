@@ -38,8 +38,11 @@ public class ToJavaScriptInterface {
         videoLists.clear();
         //如果是分天版，显示竖屏或者横屏二维码
         EventBus.getDefault().post(new EventMessageBean(String.valueOf(type),Constant.VERSION_TYPE));
+<<<<<<< HEAD
         //保存版本type
         SharedPreferencesUtils.setInt(mContext,Constant.VERSION_TYPE,type);
+=======
+>>>>>>> origin/master
         if ("1".equals(param)) {
             //关闭个人版视频界面
             Intent intent = new Intent(Constant.CLOSE_VIDEO);
@@ -47,8 +50,13 @@ public class ToJavaScriptInterface {
             //关闭下载界面
             Intent intent2 = new Intent(Constant.CLOSE_DOWNLOAD_VIDEO);
             mContext.sendBroadcast(intent2);
+<<<<<<< HEAD
             //关闭分天版视频界面
             EventBus.getDefault().post(new EventMessageBean(Constant.CLOSE_VIDEO,Constant.CLOSE_VIDEO));
+=======
+//            //关闭分天版视频界面
+//            EventBus.getDefault().post(new EventMessageBean(Constant.CLOSE_VIDEO,Constant.CLOSE_VIDEO));
+>>>>>>> origin/master
             //分天版
             if (type == 2 && !url.equals("null")) {
 
@@ -56,9 +64,7 @@ public class ToJavaScriptInterface {
             }
 
         } else if ("2".equals(param)) {
-
             downloadVideo(url, type);
-
         }
 //            ToastUtil.show(MainActivity.this, "列表数" + videoLists.size());
     }
@@ -99,4 +105,8 @@ public class ToJavaScriptInterface {
         }
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 }

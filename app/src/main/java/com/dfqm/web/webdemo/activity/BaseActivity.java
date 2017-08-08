@@ -10,7 +10,10 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+<<<<<<< HEAD
 import android.content.res.Resources;
+=======
+>>>>>>> origin/master
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -27,14 +30,20 @@ import com.dfqm.web.webdemo.API.ZmpApi;
 import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.application.AppApplication;
 import com.dfqm.web.webdemo.callback.UpdateAppCallBack;
+import com.dfqm.web.webdemo.constants.Constant;
+import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.utils.ExitAppUtils;
 import com.dfqm.web.webdemo.utils.ProgressDialogUtil;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
+<<<<<<< HEAD
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+=======
+import com.tencent.smtt.sdk.WebView;
+>>>>>>> origin/master
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -77,6 +86,8 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
         //屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        //判断屏幕方向
+        screenDirection();
         //弹窗
         progressDialog = new ProgressDialogUtil();
         //获取屏幕宽度和高度
@@ -94,6 +105,19 @@ public class BaseActivity extends AppCompatActivity {
 
         //eventbus注册
         EventBus.getDefault().register(this);
+
+    }
+
+    public void screenDirection() {
+        //横屏
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.i("info", "landscape");
+            screenDirection = true;
+        }
+        //竖屏
+        else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            screenDirection = false;
+        }
     }
 
     private void getWindowsHeightWidth() {
@@ -117,6 +141,10 @@ public class BaseActivity extends AppCompatActivity {
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
     @Override
     protected void onResume() {
         super.onResume();
@@ -295,7 +323,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-
     class UsbBroadcastReceiver extends BroadcastReceiver {
 
         @Override
@@ -312,6 +339,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+<<<<<<< HEAD
     public void setWebview(WebView webview,String sid) {
         // 通过设置WebView的settings来实现
         WebSettings settings = webview.getSettings();
@@ -342,4 +370,20 @@ public class BaseActivity extends AppCompatActivity {
         webview.loadUrl(ZmpApi.horizontal_vertical_url+sid);
 
     }
+=======
+    public void setWebview(WebView webview) {
+        webview.loadUrl(ZmpApi.horizontal_vertical_url);
+        webview.setBackgroundColor(0);
+        webview.getBackground().setAlpha(0);
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);//设置js可以直接打开窗口，如window.open()，默认为false
+        webview.getSettings().setSupportZoom(true);//是否可以缩放，默认true
+        webview.getSettings().setBuiltInZoomControls(false);//是否显示缩放按钮，默认false
+        webview.getSettings().setUseWideViewPort(true);//设置此属性，可任意比例缩放。大视图模式
+        webview.getSettings().setLoadWithOverviewMode(true);//和setUseWideViewPort(true)一起解决网页自适应问题
+        webview.getSettings().setAppCacheEnabled(false);//是否使用缓存
+        webview.getSettings().setDomStorageEnabled(true);
+    }
+
+>>>>>>> origin/master
 }

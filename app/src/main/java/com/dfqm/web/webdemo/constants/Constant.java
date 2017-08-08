@@ -49,8 +49,12 @@ public class Constant {
     public static final String RLOAD = "rload";
     //如果只有一个视频传递过来
     public static final String ADJUST_ONE_VIDEO = "adjust_one_video";
+<<<<<<< HEAD
     //版本标识,个人
     public static final String VERSION_PERSON = "1";
     //版本标识,分天
     public static final String VERSION_DAYS = "2";
+=======
+
+>>>>>>> origin/master
 }
