@@ -11,12 +11,12 @@
         android:id="@+id/rl_webview_vertical"
         android:layout_height="match_parent">
 
-        <com.tencent.smtt.sdk.WebView
+        <WebView
             android:layerType="software"
             android:id="@+id/wv_vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </com.tencent.smtt.sdk.WebView>
+        </WebView>
 
     </RelativeLayout>
 
@@ -30,12 +30,12 @@
         android:visibility="gone"
         android:layout_height="160dp">
 
-        <com.tencent.smtt.sdk.WebView
+        <WebView
             android:layerType="software"
             android:id="@+id/wv_horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </com.tencent.smtt.sdk.WebView>
+        </WebView>
 
     </RelativeLayout>
 
