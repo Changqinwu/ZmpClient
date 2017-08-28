@@ -1,15 +1,16 @@
-package com.dfqm.web.webdemo.JsClass;
+package com.dfqm.web.webdemo.tojs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.webkit.JavascriptInterface;
 
+import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.activity.FtPlayVideoActivity;
 import com.dfqm.web.webdemo.constants.Constant;
 import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.utils.DownLoadVideoUtil;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
-import com.dfqm.web.webdemo.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -35,14 +36,13 @@ public class ToJavaScriptInterface {
     //个人版播放webview轮播视频
     @JavascriptInterface
     public void changeActivity(String param, String url, int type) {
+        //播放提示音
+        toPlaySound();
         videoLists.clear();
         //如果是分天版，显示竖屏或者横屏二维码
-        EventBus.getDefault().post(new EventMessageBean(String.valueOf(type),Constant.VERSION_TYPE));
-<<<<<<< HEAD
+        EventBus.getDefault().post(new EventMessageBean(String.valueOf(type), Constant.VERSION_TYPE));
         //保存版本type
-        SharedPreferencesUtils.setInt(mContext,Constant.VERSION_TYPE,type);
-=======
->>>>>>> origin/master
+        SharedPreferencesUtils.setInt(mContext, Constant.VERSION_TYPE, type);
         if ("1".equals(param)) {
             //关闭个人版视频界面
             Intent intent = new Intent(Constant.CLOSE_VIDEO);
@@ -50,23 +50,25 @@ public class ToJavaScriptInterface {
             //关闭下载界面
             Intent intent2 = new Intent(Constant.CLOSE_DOWNLOAD_VIDEO);
             mContext.sendBroadcast(intent2);
-<<<<<<< HEAD
             //关闭分天版视频界面
-            EventBus.getDefault().post(new EventMessageBean(Constant.CLOSE_VIDEO,Constant.CLOSE_VIDEO));
-=======
-//            //关闭分天版视频界面
-//            EventBus.getDefault().post(new EventMessageBean(Constant.CLOSE_VIDEO,Constant.CLOSE_VIDEO));
->>>>>>> origin/master
+            EventBus.getDefault().post(Constant.CLOSE_VIDEO);
             //分天版
             if (type == 2 && !url.equals("null")) {
-
                 downloadVideo(url, type);
             }
 
         } else if ("2".equals(param)) {
+
             downloadVideo(url, type);
+
         }
+
 //            ToastUtil.show(MainActivity.this, "列表数" + videoLists.size());
+    }
+
+    private void toPlaySound() {
+        MediaPlayer mediaPlayer = MediaPlayer.create(mContext, R.raw.dd);
+        mediaPlayer.start();
     }
 
     private void downloadVideo(String url, int type) {
@@ -94,7 +96,7 @@ public class ToJavaScriptInterface {
 
     //分天版播放视频
     @JavascriptInterface
-    public void toPlayVideo(String url_name, int playTime,String param) {
+    public void toPlayVideo(String url_name, int playTime, String param) {
         if (url_name != null) {
 //            ToastUtil.show(mContext,"显示："+url_name);
             Intent intent = new Intent(mContext, FtPlayVideoActivity.class);
@@ -105,8 +107,4 @@ public class ToJavaScriptInterface {
         }
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 }

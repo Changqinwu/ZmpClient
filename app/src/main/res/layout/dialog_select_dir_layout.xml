@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,39 +11,54 @@
 
         <TextView
             android:id="@+id/tv_video"
-            android:background="@drawable/dialog_selec_btn_shape"
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:padding="5dp"
-            android:layout_margin="10dp"
             android:layout_height="wrap_content"
-            android:text="U盘视频列表"/>
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_selec_btn_shape"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="视频列表"
+            android:visibility="gone"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/tv_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
+            android:background="@drawable/dialog_selec_btn_shape"
             android:gravity="center"
             android:padding="5dp"
-            android:background="@drawable/dialog_selec_btn_shape"
-            android:layout_width="match_parent"
-            android:layout_margin="10dp"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content"
-            android:text="U盘图片列表"/>
+            android:text="图片列表"
+            android:visibility="gone"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/tv_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
+            android:background="@drawable/dialog_selec_btn_shape"
             android:gravity="center"
             android:padding="5dp"
-            android:background="@drawable/dialog_selec_btn_shape"
+            android:visibility="gone"
+            android:text="网络轮播"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/tv_wifi"
             android:layout_width="match_parent"
-            android:layout_margin="10dp"
-            android:textColor="@color/white"
             android:layout_height="wrap_content"
-            android:text="主界面"/>
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_selec_btn_shape"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="设置网络"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
 </RelativeLayout>

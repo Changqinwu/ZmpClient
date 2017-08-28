@@ -19,7 +19,7 @@ public class ProgressDialogUtil {
         if (dialog == null) {
             dialog = new ProgressDialog(context);
             dialog.setIndeterminate(false);
-            dialog.setCancelable(false);
+            dialog.setCancelable(true);
             dialog.setMessage(str);
             dialog.show();
         }

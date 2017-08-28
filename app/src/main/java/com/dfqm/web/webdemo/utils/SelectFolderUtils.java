@@ -10,6 +10,7 @@ import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.activity.MainActivity;
 import com.dfqm.web.webdemo.activity.UsbPictureListActivity;
 import com.dfqm.web.webdemo.activity.UsbVideoListActivity;
+import com.dfqm.web.webdemo.activity.WifiSetActivity;
 import com.dfqm.web.webdemo.application.AppApplication;
 
 /**
@@ -58,6 +59,16 @@ public class SelectFolderUtils {
                 Intent intent = new Intent(activity, MainActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
+            }
+        });
+
+        //设置网络
+        view.findViewById(R.id.tv_wifi).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                Intent intent = new Intent(activity, WifiSetActivity.class);
+                activity.startActivity(intent);
             }
         });
 

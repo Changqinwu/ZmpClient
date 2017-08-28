@@ -1,32 +1,26 @@
 package com.dfqm.web.webdemo.callback;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.dfqm.web.webdemo.activity.MainTainActivity;
 import com.dfqm.web.webdemo.activity.QrCodeActivity;
 import com.dfqm.web.webdemo.activity.UpdateAppActivity;
 import com.dfqm.web.webdemo.constants.Constant;
 import com.dfqm.web.webdemo.entity.AuthorizeEntity;
-import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.entity.MaintainEntity;
 import com.dfqm.web.webdemo.entity.UpdateEntity;
+import com.dfqm.web.webdemo.utils.ProgressDialogUtil;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.greenrobot.eventbus.EventBus;
-
 import okhttp3.Call;
-import static com.dfqm.web.webdemo.API.ZmpApi.authroize_url;
-import static com.dfqm.web.webdemo.API.ZmpApi.maintain_url;
+import static com.dfqm.web.webdemo.zmpapi.ZmpApi.authroize_url;
+import static com.dfqm.web.webdemo.zmpapi.ZmpApi.maintain_url;
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_MAIN;
 import static com.dfqm.web.webdemo.constants.Constant.ACTION_SID;
 import static com.dfqm.web.webdemo.constants.Constant.AUTHORIZE_ID;
@@ -46,17 +40,21 @@ public class UpdateAppCallBack extends StringCallback {
     private final int localversioncode;
     private final Context context;
     private final String deviceId;
+    private final ProgressDialogUtil dialogUtil;
 
-    public UpdateAppCallBack(Context context, String localversionname, int localversioncode, Activity activity,String deviceId) {
+    public UpdateAppCallBack(Context context, String localversionname, int localversioncode, Activity activity, String deviceId, ProgressDialogUtil dialogUtil) {
         this.localversionname = localversionname;
         this.localversioncode = localversioncode;
         this.context = context;
         this.deviceId = deviceId;
+        this.dialogUtil = dialogUtil;
     }
 
 
     @Override
     public void onError(Call call, Exception e, int id) {
+        //取消弹窗
+        dialogUtil.dismissProgressDialog();
         ToastUtil.show(context, e.getMessage());
         //显示错误主界面
         Intent intent = new Intent(ACTION_MAIN);
@@ -67,6 +65,8 @@ public class UpdateAppCallBack extends StringCallback {
     public void onResponse(String response, int id) {
         //解析数据
         if (response != null) {
+            //取消弹窗
+            dialogUtil.dismissProgressDialog();
             Gson gson = new Gson();
             UpdateEntity updateEntity = gson.fromJson(response, UpdateEntity.class);
             int httpversionCode = Integer.valueOf(updateEntity.getVersionCode());
@@ -81,11 +81,9 @@ public class UpdateAppCallBack extends StringCallback {
                 //是否有维护
                 serverMainTain();
             }
-
         }
 
     }
-
 
     private void serverMainTain() {
         //查看服务器是否有维护
@@ -101,6 +99,8 @@ public class UpdateAppCallBack extends StringCallback {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        //取消弹窗
+                        dialogUtil.dismissProgressDialog();
                         Gson gson = new Gson();
                         MaintainEntity maintainEntity = gson.fromJson(response, MaintainEntity.class);
                         String mainTainType = maintainEntity.getMainTainType();
@@ -108,13 +108,13 @@ public class UpdateAppCallBack extends StringCallback {
                             //跳转到维护界面
                             Intent intent = new Intent(context, MainTainActivity.class);
                             context.startActivity(intent);
-                        } else {
-                            if (!"".equals(deviceId)) {
-                                //是否授权
-                                userAuthorize(authroize_url + deviceId, deviceId);
-                            }
-
                         }
+//                        else {
+//                            if (!"".equals(deviceId)) {
+//                                //是否授权
+//                                userAuthorize(authroize_url + deviceId, deviceId);
+//                            }
+//                        }
                     }
                 });
     }

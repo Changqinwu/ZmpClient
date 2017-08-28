@@ -52,7 +52,6 @@ public class DownloadActivity extends BaseActivity {
         //显示弹窗
         progressDialog.showProgressDialog(this, "正在准备视频...");
 
-
         //关闭分天版视频播放界面
         EventBus.getDefault().post(Constant.CLOSE_VIDEO);
 
@@ -65,8 +64,6 @@ public class DownloadActivity extends BaseActivity {
         x.view().inject(this);
         //初始化view
         initView();
-
-
     }
 
     private void initView() {
@@ -85,7 +82,6 @@ public class DownloadActivity extends BaseActivity {
         filter.addAction(Constant.CLOSE_VIDEO);
         filter.addAction(Constant.CLOSE_DOWNLOAD_VIDEO);
         registerReceiver(receiver, filter);
-
     }
 
     @Override
@@ -240,7 +236,7 @@ public class DownloadActivity extends BaseActivity {
         public void onLoading(long total, long current) {
             refresh();
             tv_percent.setText(current*100/total + "%");
-            tv_total.setText(FileUtils.bytes2kb(total) + "");
+            tv_total.setText(formatSize(String.valueOf(total)));
         }
 
         @Override

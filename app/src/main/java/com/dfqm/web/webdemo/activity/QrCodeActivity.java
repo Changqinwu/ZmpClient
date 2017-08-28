@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import android.widget.TextView;
 
-import com.dfqm.web.webdemo.API.ZmpApi;
+import com.dfqm.web.webdemo.zmpapi.ZmpApi;
 import com.dfqm.web.webdemo.R;
 
 import com.dfqm.web.webdemo.constants.Constant;
@@ -85,8 +85,8 @@ public class QrCodeActivity extends BaseActivity implements View.OnClickListener
                 break;
             //左上角跳转到设置界面
             case R.id.ima_to_set:
-                Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                startActivity(intent);
+//                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+//                startActivity(intent);
                 break;
         }
 

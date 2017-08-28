@@ -7,13 +7,8 @@ android {
         applicationId "com.dfqm.web.webdemo"
         minSdkVersion 16
         targetSdkVersion 25
-<<<<<<< HEAD
         versionCode 3
         versionName "1.0.2"
-=======
-        versionCode 4
-        versionName "1.0.3"
->>>>>>> origin/master
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,6 +20,7 @@ android {
 
         release {
             minifyEnabled true
+            shrinkResources true
             //混淆规则配置文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

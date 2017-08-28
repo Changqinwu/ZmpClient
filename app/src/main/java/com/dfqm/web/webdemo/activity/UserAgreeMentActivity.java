@@ -9,7 +9,7 @@ import com.dfqm.web.webdemo.R;
 import com.dfqm.web.webdemo.utils.LoadWebViewDataUtil;
 import com.tencent.smtt.sdk.WebView;
 
-import static com.dfqm.web.webdemo.API.ZmpApi.agreement_url;
+import static com.dfqm.web.webdemo.zmpapi.ZmpApi.agreement_url;
 
 public class UserAgreeMentActivity extends BaseActivity {
 

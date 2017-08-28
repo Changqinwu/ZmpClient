@@ -3,6 +3,7 @@ package com.dfqm.web.webdemo.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -14,12 +15,8 @@ import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
 import com.dfqm.web.webdemo.utils.ToastUtil;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
-import com.tencent.smtt.sdk.WebView;
-<<<<<<< HEAD
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-=======
->>>>>>> origin/master
 
 
 public class FtPlayVideoActivity extends BaseActivity implements View.OnClickListener {
@@ -34,10 +31,8 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout mRlHorizontal;
     private WebView mWvVertical;
     private WebView mWvHorizontal;
-<<<<<<< HEAD
     private int version_type;
-=======
->>>>>>> origin/master
+    private String sid;
 
 
     @Override
@@ -54,36 +49,6 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-//    //接受eventbus的消息
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onMessageEvent(EventMessageBean eventMessageBean) {
-//
-//        String msgId = eventMessageBean.getMsgId();
-//       if (screenDirection && msgId.equals("2")) {
-//            //横屏并且是分天版
-//            mRlVertical.setVisibility(View.VISIBLE);
-//            mRlHorizontal.setVisibility(View.GONE);
-//            //设置wenview
-//            setWebview(mWvVertical);
-////            ToastUtil.show(MainActivity.this,"横屏二维码显示");
-//
-//        }else if (!screenDirection && msgId.equals("2")) {
-//            //竖屏并且是分天版
-//            mRlVertical.setVisibility(View.GONE);
-//            mRlHorizontal.setVisibility(View.VISIBLE);
-//            //设置wenview
-//            setWebview(mWvHorizontal);
-////            ToastUtil.show(MainActivity.this,"竖屏二维码显示");
-//        }else if (msgId.equals(Constant.CLOSE_VIDEO)) {
-//           //关闭界面
-//           FtPlayVideoActivity.this.finish();
-//           if (mVv != null) {
-//               mVv.stopPlayback();
-//           }
-//       }
-//
-//    }
-
     private void initData() {
 
         //获取参数播放不同视频
@@ -95,10 +60,6 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
             play_time = intent.getIntExtra(Constant.PLAY_TIME, 0);
             //只有一个视频
             param = intent.getStringExtra(Constant.ADJUST_ONE_VIDEO);
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
         }
 
         //拿到文件路径播放视频
@@ -106,14 +67,11 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
 //        mVv.setVideoURI(mVideoUri);
         mVv.setVideoPath("/sdcard/zmpvideo/" + play_video_name);
 
-        mVv.start();
-
-
         //开始播放
         mVv.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(PLMediaPlayer plMediaPlayer) {
-//                mVv.start();
+                mVv.start();
             }
         });
 
@@ -149,10 +107,7 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
             }
         });
 
-<<<<<<< HEAD
         //如果视频多于1个，param为0，隔个play_time轮回播放
-=======
->>>>>>> origin/master
         if ("0".equals(param)) {
             //根据前端传过来的时间关闭视频
             mVv.postDelayed(new Runnable() {
@@ -168,10 +123,10 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showQr() {
+        //获取本地sid
+        sid = SharedPreferencesUtils.getString(this, Constant.SID, "1");
         //获取版本类型
         version_type = SharedPreferencesUtils.getInt(this, Constant.VERSION_TYPE, 1);
-        //获取sid
-        String sid = SharedPreferencesUtils.getString(this, Constant.SID, "1");
         if (screenDirection && version_type == 2) {
             //横屏并且是分天版
             mRlVertical.setVisibility(View.VISIBLE);
@@ -193,23 +148,16 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
         mVv = (PLVideoTextureView) findViewById(R.id.vidioview);
         mImaExit = (ImageView) findViewById(R.id.ima_exit_app);
         mImaOpenVideoList = (ImageView) findViewById(R.id.ima_open_videolist);
-<<<<<<< HEAD
         mRlVertical = (RelativeLayout) findViewById(R.id.rl_webview_vertical);
         mRlHorizontal = (RelativeLayout) findViewById(R.id.rl_webview_horizontal);
         mWvVertical = (WebView) findViewById(R.id.wv_vertical);
         mWvHorizontal = (WebView) findViewById(R.id.wv_horizontal);
-=======
-
->>>>>>> origin/master
 
         mImaExit.setOnClickListener(this);
         mImaOpenVideoList.setOnClickListener(this);
 
-<<<<<<< HEAD
         mRlVertical.setVisibility(View.GONE);
         mRlHorizontal.setVisibility(View.GONE);
-=======
->>>>>>> origin/master
     }
 
     @Override
@@ -233,7 +181,6 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-<<<<<<< HEAD
     //接受eventbus的消息
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventMessageBean eventMessageBean) {
@@ -246,12 +193,6 @@ public class FtPlayVideoActivity extends BaseActivity implements View.OnClickLis
                 mVv.stopPlayback();
             }
         }
-=======
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
->>>>>>> origin/master
     }
 }
 

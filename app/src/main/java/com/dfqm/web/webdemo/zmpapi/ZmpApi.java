@@ -1,4 +1,4 @@
-package com.dfqm.web.webdemo.API;
+package com.dfqm.web.webdemo.zmpapi;
 
 /**
  * Created by Administrator on 2017/1/24.
@@ -23,15 +23,8 @@ public class ZmpApi {
     public static final String video_url = "http://999.zimeiping.com/wcq/zmp/videolist.txt";
 
     //测试界面
-<<<<<<< HEAD
-//    public static final String main_url = "http://999.zimeiping.com/hhw/zmp_app_banner/test.html?sid=";
-
-    //竖屏横屏二维码
-    public static final String horizontal_vertical_url = "http://999.zimeiping.com/hhw/zmp_app_banner/ScreenDetailQRImage.html?sid=";
-=======
 //    public static final String main_url = "http://999.zimeiping.com/hhw/zmp_app_banner/GetRotatorSetting.html?sid=";
 
     //竖屏横屏二维码
-    public static final String horizontal_vertical_url = "http://999.zimeiping.com/hhw/zmp_app_banner/ScreenDetailQRImage.html";
->>>>>>> origin/master
+    public static final String horizontal_vertical_url = "http://999.zimeiping.com/hhw/zmp_app_banner/ScreenDetailQRImage.html?sid=";
 }

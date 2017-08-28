@@ -38,19 +38,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="#000"
+            android:textColor="#cdcdcd"
             android:textSize="@dimen/reconnect_text_tip"
             android:visibility="gone"/>
 
 
     </LinearLayout>
 
-
-    <include
-        layout="@layout/horizontal_vertical_qr_code_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
 
     <include
         layout="@layout/horizontal_vertical_qr_code_layout"

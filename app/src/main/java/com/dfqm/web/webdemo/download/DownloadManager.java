@@ -42,12 +42,13 @@ public final class DownloadManager {
 
     private DownloadManager() {
 
-
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
                 .setDbName("download")
                 .setDbVersion(1);
         db = x.getDb(daoConfig);
         try {
+            //删除数据库
+            db.dropDb();
             List<DownloadInfo> infoList = db.selector(DownloadInfo.class).findAll();
             if (infoList != null) {
                 for (DownloadInfo info : infoList) {

@@ -3,6 +3,8 @@ package com.dfqm.web.webdemo.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -28,6 +30,8 @@ import java.util.regex.Pattern;
 public class ExitAppUtils {
 
     public static String DefaultPwd = "dfqm";
+    public static String setWifiPwd = "set_";
+    public static String resetIdPwd = "dfqm_reset";
 
     //退出app弹窗
     public static void dialogExit(final Context context) {
@@ -56,20 +60,18 @@ public class ExitAppUtils {
 //                                    Toast.makeText(context, "输入有误...", Toast.LENGTH_SHORT).show();
 //                                }
                             } else if (pwd.equals(DefaultPwd)) {
-<<<<<<< HEAD
                                 System.exit(0);
                                 //结束Activity& 从栈中移除该Activity
 //                                AppApplication.getApp().exit();
-=======
-//                                System.exit(0);
-                                //结束Activity& 从栈中移除该Activity
-                                AppApplication.getApp().exit();
->>>>>>> origin/master
-                            }else if (pwd.equals("123456")) {
+                            }else if (pwd.equals(resetIdPwd)) {
                                 //删除唯一识别码
                                 FileUtils.RecursionDeleteFile(new File("/sdcard/zmpfile/uniqueId.txt"));
                                 //重新加载页面
                                 EventBus.getDefault().post(new EventMessageBean(Constant.RLOAD,"1"));
+                            }else if (pwd.equals(setWifiPwd)) {
+                                //跳转到wifi设置界面
+                                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                                context.startActivity(intent);
                             }else {
                                 Toast.makeText(context, "输入有误...", Toast.LENGTH_SHORT).show();
                             }

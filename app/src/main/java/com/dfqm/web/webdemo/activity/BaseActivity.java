@@ -7,49 +7,39 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-<<<<<<< HEAD
-import android.content.res.Resources;
-=======
->>>>>>> origin/master
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Toast;
 
-import com.dfqm.web.webdemo.API.ZmpApi;
+import com.dfqm.web.webdemo.zmpapi.ZmpApi;
 import com.dfqm.web.webdemo.R;
-import com.dfqm.web.webdemo.application.AppApplication;
 import com.dfqm.web.webdemo.callback.UpdateAppCallBack;
-import com.dfqm.web.webdemo.constants.Constant;
-import com.dfqm.web.webdemo.entity.EventMessageBean;
 import com.dfqm.web.webdemo.utils.ExitAppUtils;
 import com.dfqm.web.webdemo.utils.ProgressDialogUtil;
 import com.dfqm.web.webdemo.utils.SharedPreferencesUtils;
-<<<<<<< HEAD
-import com.dfqm.web.webdemo.utils.ToastUtil;
-import com.tencent.smtt.sdk.WebChromeClient;
-import com.tencent.smtt.sdk.WebSettings;
-import com.tencent.smtt.sdk.WebView;
-import com.tencent.smtt.sdk.WebViewClient;
-=======
-import com.tencent.smtt.sdk.WebView;
->>>>>>> origin/master
+
 import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.lang.reflect.Method;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -58,7 +48,7 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
-import static com.dfqm.web.webdemo.API.ZmpApi.update_url;
+import static com.dfqm.web.webdemo.zmpapi.ZmpApi.update_url;
 import static com.dfqm.web.webdemo.constants.Constant.VERSIONID;
 
 @RuntimePermissions
@@ -74,6 +64,7 @@ public class BaseActivity extends AppCompatActivity {
     public String file_path;
     //判断屏幕是否横屏
     public boolean screenDirection;
+    private int uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +77,6 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
         //屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //判断屏幕方向
-        screenDirection();
         //弹窗
         progressDialog = new ProgressDialogUtil();
         //获取屏幕宽度和高度
@@ -105,7 +94,15 @@ public class BaseActivity extends AppCompatActivity {
 
         //eventbus注册
         EventBus.getDefault().register(this);
+    }
 
+
+
+    private void getWindowsHeightWidth() {
+        WindowManager wm = (WindowManager) getSystemService(this.WINDOW_SERVICE);
+        int width = wm.getDefaultDisplay().getWidth();
+        int height = wm.getDefaultDisplay().getHeight();
+        Log.e("屏幕高和宽", "宽度" + width + ">>>>>" + "高度" + height);
     }
 
     public void screenDirection() {
@@ -120,31 +117,6 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void getWindowsHeightWidth() {
-        WindowManager wm = (WindowManager) getSystemService(this.WINDOW_SERVICE);
-        int width = wm.getDefaultDisplay().getWidth();
-        int height = wm.getDefaultDisplay().getHeight();
-        Log.e("屏幕高和宽", "宽度" + width + ">>>>>" + "高度" + height);
-
-    }
-
-    public void screenDirection() {
-        //横屏
-        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            screenDirection = true;
-        }
-        //竖屏
-        else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            screenDirection = false;
-        }
-    }
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
     @Override
     protected void onResume() {
         super.onResume();
@@ -260,7 +232,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    public void updateApp(String deviceId) {
+    public void updateApp(String deviceId,ProgressDialogUtil progressDialog) {
 
         //获取本地版本
         PackageManager manager = this.getPackageManager();
@@ -277,7 +249,7 @@ public class BaseActivity extends AppCompatActivity {
                 .id(VERSIONID)
                 .url(update_url)
                 .build()
-                .execute(new UpdateAppCallBack(this, localVersionName, localversionCode, this, deviceId));
+                .execute(new UpdateAppCallBack(this, localVersionName, localversionCode, this, deviceId,progressDialog));
     }
 
 
@@ -323,6 +295,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
+
     class UsbBroadcastReceiver extends BroadcastReceiver {
 
         @Override
@@ -332,19 +305,18 @@ public class BaseActivity extends AppCompatActivity {
             if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
                 String path = intent.getDataString();
                 file_path = path.replace("file://", "");
-                Toast.makeText(context, "检测到U盘:" + file_path + "", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "usb路径" + file_path + "", Toast.LENGTH_LONG).show();
                 SharedPreferencesUtils.setString(context, "path", file_path);
 
             }
         }
     }
 
-<<<<<<< HEAD
-    public void setWebview(WebView webview,String sid) {
+    public void setWebview(WebView webview, String sid) {
         // 通过设置WebView的settings来实现
         WebSettings settings = webview.getSettings();
         webview.setBackgroundColor(0);
-        webview.getBackground().setAlpha(0);
+//        webview.getBackground().setAlpha(0);
         settings.setJavaScriptEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);//只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。
         settings.setJavaScriptCanOpenWindowsAutomatically(true);//设置js可以直接打开窗口，如window.open()，默认为false
@@ -368,22 +340,21 @@ public class BaseActivity extends AppCompatActivity {
         settings.setAllowFileAccess(true);
 
         webview.loadUrl(ZmpApi.horizontal_vertical_url+sid);
-
     }
-=======
-    public void setWebview(WebView webview) {
-        webview.loadUrl(ZmpApi.horizontal_vertical_url);
-        webview.setBackgroundColor(0);
-        webview.getBackground().setAlpha(0);
-        webview.getSettings().setJavaScriptEnabled(true);
-        webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);//设置js可以直接打开窗口，如window.open()，默认为false
-        webview.getSettings().setSupportZoom(true);//是否可以缩放，默认true
-        webview.getSettings().setBuiltInZoomControls(false);//是否显示缩放按钮，默认false
-        webview.getSettings().setUseWideViewPort(true);//设置此属性，可任意比例缩放。大视图模式
-        webview.getSettings().setLoadWithOverviewMode(true);//和setUseWideViewPort(true)一起解决网页自适应问题
-        webview.getSettings().setAppCacheEnabled(false);//是否使用缓存
-        webview.getSettings().setDomStorageEnabled(true);
-    }
+    //获取Uid
+    public int getAppUid(){
+        try {
+            PackageManager pm = getPackageManager();
+            ApplicationInfo ai = pm.getApplicationInfo("com.dfqm.web.webdemo", PackageManager.GET_ACTIVITIES);
+            uid = ai.uid;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
->>>>>>> origin/master
+        return uid;
+    }
+    //工具类 根据文件大小自动转化为KB, MB, GB
+    public String formatSize(String target_size) {
+        return Formatter.formatFileSize(this, Long.valueOf(target_size));
+    }
 }
